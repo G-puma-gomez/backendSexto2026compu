@@ -4,7 +4,7 @@ if($_SERVER['REQUEST_METHOD']=='OPTIONS')
         exit;
     }
     require_once "../src/router.php";
-    require_once "../src/controller/usuariosController.php";
+    require_once "../src/controller/userController.php";
     require_once "../src/controller/ProductoController.php";
     require_once "../src/controller/ProveedorController.php";
     require_once "../src/controller/ClienteController.php";
@@ -19,6 +19,8 @@ if($_SERVER['REQUEST_METHOD']=='OPTIONS')
     $route->add('GET','/usuarios','userController@getAll');
 // direccion de productos
     $route->add('GET','/productos','ProductoController@getAll');
+    $route->add('POST','/productos','ProductoController@add');
+    $route->add('PUT','/productos','ProductoController@update');
 // direccion de proveedor
     $route->add('GET','/proveedores','ProveedorController@getAll'); 
 // direccion de clientes

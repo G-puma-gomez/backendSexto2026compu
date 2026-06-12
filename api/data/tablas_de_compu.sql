@@ -12,12 +12,12 @@ INSERT INTO proveedores(ci, nombre, apellidos) VALUES
 ('4756102', 'Lucía', 'Pinto Aramayo'),
 ('3344556', 'Alejandro', 'Zeballos Castro');
 
-INSERT INTO productos (codbarras, descripcion, stock, precio_unitario) VALUES
+INSERT INTO productos(codbarras,descripcion,stock,precio_unitario) VALUES
 ('4719331302840', 'Laptop ASUS Vivobook 15" Core i5 16GB RAM 512GB SSD', 15, 6800.00),
 ('0840006622147', 'Memoria RAM Corsair Vengeance DDR4 16GB (2x8GB) 3200MHz', 45, 450.50),
 ('4712900697031', 'Tarjeta de Video NVIDIA RTX 4060 Ti 8GB GDDR6', 8, 3850.00),
 ('0619659185626', 'Disco Duro Sólido SSD Kingston NV2 1TB NVMe PCIe 4.0', 60, 580.00),
-('8806094214573', 'Monitor Gamer Samsung Odyssey G3 24" 165Hz 1ms', 12, 1450.90);
+('8806094214573', 'Monitor Gamer Samsung Odyssey G3 24" 165Hz 1ms', 12, 1451.90);
 
 SELECT * FROM clientes;
 SELECT * FROM proveedores;
@@ -48,7 +48,7 @@ SELECT * FROM proveedor_producto;
 SELECT * FROM pedido;
 SELECT * FROM pedido_producto;
 
-INSERT INTO usuarios (cod_cliente, email, password_hash) VALUES
+INSERT INTO usuarios(cod_cliente, email, password_hash) VALUES
 (1, 'carlos.mendoza@email.com', '$2y$10$e0myZXy9x...hash_simulado_1'), -- Cliente 1: Carlos
 (2, 'ana.gutierrez@email.com', '$2y$10$e0myZXy9x...hash_simulado_2'),  -- Cliente 2: Ana María
 (3, 'jorge.espinoza@email.com', '$2y$10$e0myZXy9x...hash_simulado_3'), -- Cliente 3: Jorge Luis
