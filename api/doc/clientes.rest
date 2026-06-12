@@ -1,0 +1,2 @@
+### consulta de clientes
+GET http://www.sexto2026compu.com/clientes

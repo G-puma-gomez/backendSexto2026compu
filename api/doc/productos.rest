@@ -1,0 +1,2 @@
+### consulta de productos
+GET http://www.sexto2026compu.com/productos
