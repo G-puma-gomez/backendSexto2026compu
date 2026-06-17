@@ -20,7 +20,7 @@ if($_SERVER['REQUEST_METHOD']=='OPTIONS')
 // direccion de productos
     $route->add('GET','/productos','ProductoController@getAll');
     $route->add('POST','/productos','ProductoController@add');
-    $route->add('PUT','/productos','ProductoController@update');
+    $route->add('PUT','/productos/{id}','ProductoController@update');
 // direccion de proveedor
     $route->add('GET','/proveedores','ProveedorController@getAll'); 
 // direccion de clientes

@@ -2,12 +2,11 @@
 GET http://www.sexto2026compu.com/productos
 
 ### modificar productos
-PUT http://www.sexto2026compu.com/productos
+PUT http://www.sexto2026compu.com/productos/1
 
-hearders:Content-Type: application/json
 {
     "codbarras":"4719331302586840",
     "descripcion":"Monitor Gamer Curvo Samsung Odyssey Neo G8 32 Pulgadas 4K UHD 240Hz",
     "precio_unitario":"7999.00",
-    "stock":"10"
+    "stock":11
 }

@@ -7,9 +7,9 @@ class productos
         $sql="SELECT * FROM productos";
         return ConexionPDO::query($sql);//self::$users;
     }
-    public static function update()
+    public static function update($id,$data)
     {
-        $sql="SELECT * FROM productos";
+        $sql = "SELECT * FROM productos";
         return ConexionPDO::query($sql);//self::$users;
     }
 }

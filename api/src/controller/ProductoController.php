@@ -6,11 +6,38 @@ class ProductoController{
         $producto=productos::all();
         echo json_encode($producto);
     }
-    public function update()
+    // actualizar producto
+    public function update($id)
     {
         $jsonData=file_get_contents('php://input');
-        die($jsonData);
-        $producto=productos::update();
+       $data= json_decode($jsonData,true);
+         if(json_last_error()!=JSON_ERROR_NONE)
+                    {
+                echo json_encode(
+                    [
+                        "status"=>"error codificacion",
+                        "message"=>json_last_error_msg(),
+                    ]);
+                return;
+            }
+        if(!isset($data['codbarras']) || trim($data['codbarras'])=="")
+                  {
+                echo json_encode(
+                    [
+                        "status"=>"error",
+                        "message"=>"el codbarras es obligatorio",
+                    ]);
+                return;
+            }
+        $producto=productos::update($id,$jsonData);
         echo json_encode($producto);
     }
+    // adicionar producto
+ //       public function add()
+   // {
+     //   $jsonData=file_get_contents('php://input');
+       // die($jsonData);
+        //$producto=productos::update($id);
+        //echo json_encode($producto);
+    //}
 }
