@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__."/../config/conexionDB.php";
-class productos
+class Productos
 {
     public static function all()
     {
@@ -23,7 +23,7 @@ class productos
             }
         $stringCampos=implode(",",$campos);
         // preparamos la consulta 
-        $sql="UPDATE productos SET $stringCampos WRERE id=:id";
+        $sql="UPDATE Productos SET $stringCampos WHERE id=:id";
         $valores[':id']=$id;
        // $result=ConexionPDO::();
        // $sql = "SELECT * FROM productos";
