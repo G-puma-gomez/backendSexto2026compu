@@ -30,5 +30,21 @@ class ConexionPDO
         {
             return["ERROR"=>$e->getMessage()];
         }
-    }
+    }   
+        public static function execute( $sql, array $param=[], $id)
+        {
+            try{
+                $db=self::connect();
+                $stmt=$db->prepare($sql);
+                $res=$stmt->execute($param);
+                if ($id == true)
+                {
+                    return $db->lastInsertId();
+                }
+                return $res;
+            }catch(Exception $e)
+            {
+                die("existe error al procesar datos ".$e->getMessage());
+            }
+        }
 }

@@ -56,15 +56,42 @@ class ProductoController{
                     ]);
                 return;
             }
+    
         $producto=productos::update($id,$data);
-        echo json_encode($producto);
+
+        if($producto)
+        {
+            echo json_encode(
+                [
+                "estado"=>true,
+                "message"=>"producto actualizado correctamente"
+            ]);
+        return;
+        
     }
-    // adicionar producto
- //       public function add()
-   // {
-     //   $jsonData=file_get_contents('php://input');
-       // die($jsonData);
-        //$producto=productos::update($id);
-        //echo json_encode($producto);
-    //}
-}
+
+    echo json_encode($producto);
+     }
+      //adicionar producto
+    public function add()
+    {
+        $jsonData=file_get_contents('php://input');
+       $data= json_decode($jsonData,true);
+        $producto=productos::add($data);
+
+        if($producto)
+        {
+            echo json_encode(
+                [
+                "estado"=>true,
+                "message"=>"producto agregado correctamente"
+            ]);
+        return;
+        
+    }
+
+    echo json_encode($producto);
+     }
+   }
+
+    

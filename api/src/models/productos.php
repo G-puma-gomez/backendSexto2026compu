@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__."/../config/conexionDB.php";
-class Productos
+class productos
 {
     public static function all()
     {
@@ -9,24 +9,45 @@ class Productos
     }
     public static function update($id,$data)
     {
-        if(isset($data{'id'})){
-        unset($data['id']);
+       
+        if(isset($data['id'])){
+           unset($data['id']);
         }
         $campos=[];
         $valores=[];
         // construir datos
         foreach($data as $columna=>$valor)
             {
-                $campos[]="$columna=:columna";
-                $valores[":$columna"]=$valor;
+                $campos[]="$columna=:$columna";
+                $valores[":$columna"] = $valor;
 
             }
+             
         $stringCampos=implode(",",$campos);
         // preparamos la consulta 
-        $sql="UPDATE Productos SET $stringCampos WHERE id=:id";
+        $sql="UPDATE productos SET $stringCampos WHERE id=:id";
         $valores[':id']=$id;
-       // $result=ConexionPDO::();
-       // $sql = "SELECT * FROM productos";
-        return $sql;// ConexionPDO::query($sql);//self::$users;
+        $result=ConexionPDO::execute($sql, $valores,false);
+
+        return $result;
     }
+    public static function add($data)
+    {
+        $campos=[];
+        $valores=[];
+        // construir datos
+        foreach($data as $columna=>$valor)
+            {
+                $campos[]="$columna=:$columna";
+                $valores[":$columna"] = $valor;
+
+            }
+             
+        $stringCampos=implode(",",$campos);
+        die($stringCampos);
+        // preparamos la consulta 
+        $sql="INSERT productos ($stringCampos) VALUES ($valores)";
+        $result=ConexionPDO::execute($sql, $valores,true);
+        return $sql;}
+     
 }
