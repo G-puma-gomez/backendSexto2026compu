@@ -31,4 +31,6 @@ if($_SERVER['REQUEST_METHOD']=='OPTIONS')
     $route->add('GET','/proveedor_producto','ProveedorProductoController@getAll');
 // direccion de pedido_productos
     $route->add('GET','/pedido_producto','PedidoProductoController@getAll');
+    $route->add('POST','/pedido_producto','PedidoProductoController@add');
+    $route->add('PUT','/pedido_producto/{id}','PedidoProductoController@update');
     $route->run();
