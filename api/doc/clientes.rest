@@ -1,2 +1,23 @@
 ### consulta de clientes
 GET http://www.sexto2026compu.com/clientes
+### modificar clientes
+PUT http://www.sexto2026compu.com/clientes/1
+
+{
+    "ci":12345678,
+    "nombre":"Juan",
+    "apellidos":"Perez",
+    "direccion":"Calle Falsa 123",
+    "telefono":123456789
+}
+
+### agregar clientes
+POST http://www.sexto2026compu.com/clientes
+
+{
+    "ci":12345678,
+    "nombre":"Juan",
+    "apellidos":"Perez",
+    "direccion":"Calle Falsa 123",
+    "telefono":123456789
+}

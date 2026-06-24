@@ -11,7 +11,7 @@ class PedidoProductoController{
     {
         $jsonData=file_get_contents('php://input');
        $data= json_decode($jsonData,true);
-         if(json_last_error()!=JSON_ERROR_NONE)
+         if(json_last_error()!=JSON_ERROR_NONE) 
                     {
                 echo json_encode(
                     [

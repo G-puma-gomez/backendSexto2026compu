@@ -52,8 +52,8 @@ class ProductoController{
                 echo json_encode(
                     [
                         "status"=>"error",
-                        "message"=>"el stock es obligatorio",
-                    ]);
+                        "message"=>"el stock es obligatorio", 
+                    ]); 
                 return;
             }
     

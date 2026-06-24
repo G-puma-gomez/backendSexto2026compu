@@ -1,2 +1,18 @@
 ### consulta de proveedores
 GET http://www.sexto2026compu.com/proveedores
+### modificar proveedores
+PUT http://www.sexto2026compu.com/proveedores/1
+
+{
+    "ci":12345678,
+    "nombre":"Pedronosque",
+    "apellidos":"abalayavu"
+}
+### agregar proveedores
+POST http://www.sexto2026compu.com/proveedores
+
+{
+    "ci":12345678,
+    "nombre":"Pedronosque",
+    "apellidos":"abalayavu"
+}

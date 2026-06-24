@@ -18,6 +18,5 @@ POST http://www.sexto2026compu.com/pedido_producto
     "cod_producto":1,
     "cantidad":2,
     "precio_unitario":7996.00,
-    "descuento":50.00,
-    "id":1
+    "descuento":50.00
 }
