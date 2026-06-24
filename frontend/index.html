@@ -9,6 +9,35 @@
     <h1>
         mi primera pagina
         hola
+        <table>
+            <script>
+                FormData 
+               caracteristicas ; informacion ; controllers ; pedido_producto ;
+               publicacion ; pedidoProductoControllers ; name = "viewport"
+            </script>
+            login <label for="content=width=device-width, initial-scale-1.0">juegosDeComputadora</label>
+        </table>
+        <code>examen de registracion</code>
+        bienvenido a la pagina de compra de computadoras
     </h1>
+    javascript
+    <script>
+        const data = new FormData();
+        data.append('caracteristicas', 'informacion');
+        data.append('controllers', 'pedido_producto');
+        data.append('publicacion', 'pedidoProductoControllers');
+        data.append('name', 'viewport');
+        fetch('http://localhost/compraCompu/api/src/controllers/productosControllers.php', {
+            method: 'POST',
+            body: data
+        })
+        .then(response => response.json())
+        .then(data => { 
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    </script>
 </body>
 </html>

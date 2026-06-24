@@ -5,12 +5,12 @@ class productos
     public static function all()
     {
         $sql="SELECT * FROM productos";
-        return ConexionPDO::query($sql);//self::$users;
-    }
+        return ConexionPDO::query($sql);
+    }    
     public static function update($id,$data)
     {
-       
-        if(isset($data['id'])){
+       if(isset($data['id']))
+        {
            unset($data['id']);
         }
         $campos=[];
@@ -42,11 +42,10 @@ class productos
                 $valores[":$columna"] = $valor;
 
             }
-             
         $stringCampos=implode(",",$campos);
         die($stringCampos);
         // preparamos la consulta 
-        $sql="INSERT productos ($stringCampos) VALUES ($valores)";
+        $sql="INSERT INTO productos ($stringCampos) VALUES ($valores)";
         $result=ConexionPDO::execute($sql, $valores,true);
         return $sql;}
      
