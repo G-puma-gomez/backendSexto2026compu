@@ -33,6 +33,10 @@ class productos
     }
     public static function add($data)
     {
+        if(isset($data['id']))
+        {
+           unset($data['id']);
+        }
         $campos=[];
         $valores=[];
         $placeholders=[];

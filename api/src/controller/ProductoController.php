@@ -77,8 +77,50 @@ class ProductoController
     public function add()
     {
         $jsonData = file_get_contents('php://input');
-       $data = json_decode($jsonData, true);
-        $producto = productos::add($data);
+        $data = json_decode($jsonData, true);
+        if(json_last_error()!=JSON_ERROR_NONE)
+            {
+                echo json_encode(
+                    [
+                        "status"=>"error codificacion",
+                        "message"=>json_last_error_msg(),
+                    ]);
+                return;
+            }
+        $camposObligatorios=[
+            "codbarras",
+            "descripcion",
+            "precio_unitario",
+            "stock",
+        ];
+        $camposFaltantes=[];
+
+        foreach($camposObligatorios as $campo)
+            {
+                if(!isset($data[$campo]) || trim((string)$data[$campo])=="")
+                    {
+                        $camposFaltantes[]=$campo;
+                    }
+            }
+
+        if(count($camposFaltantes)>0)
+            {
+                echo json_encode(
+                    [
+                        "status"=>"error",
+                        "message"=>"debe llenar los datos que faltan",
+                        "campos_faltantes"=>$camposFaltantes,
+                    ]);
+                return;
+            }
+
+        $datosProducto=[];
+        foreach($camposObligatorios as $campo)
+            {
+                $datosProducto[$campo]=$data[$campo];
+            }
+
+        $producto = productos::add($datosProducto);
 
         if($producto)
         {
