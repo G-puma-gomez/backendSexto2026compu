@@ -35,18 +35,21 @@ class productos
     {
         $campos=[];
         $valores=[];
+        $placeholders=[];
         // construir datos
         foreach($data as $columna=>$valor)
             {
-                $campos[]="$columna=:$columna";
+                $campos[]=$columna;
+                $placeholders[]=":$columna";
                 $valores[":$columna"] = $valor;
 
             }
         $stringCampos=implode(",",$campos);
-        die($stringCampos);
+        $stringPlaceholders=implode(",",$placeholders);
         // preparamos la consulta 
-        $sql="INSERT INTO productos ($stringCampos) VALUES ($valores)";
+        $sql="INSERT INTO productos ($stringCampos) VALUES ($stringPlaceholders)";
         $result=ConexionPDO::execute($sql, $valores,true);
-        return $sql;}
+        return $result;
+     }
      
 }

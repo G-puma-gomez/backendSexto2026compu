@@ -1,6 +1,7 @@
 <?php
 require_once "../src/models/productos.php";
-class ProductoController{
+class ProductoController
+{
     public function getAll()
     {
         $producto=productos::all();
@@ -75,16 +76,16 @@ class ProductoController{
       //adicionar producto
     public function add()
     {
-        $jsonData=file_get_contents('php://input');
-       $data= json_decode($jsonData,true);
-        $producto=productos::add($data);
+        $jsonData = file_get_contents('php://input');
+       $data = json_decode($jsonData, true);
+        $producto = productos::add($data);
 
         if($producto)
         {
             echo json_encode(
                 [
-                "estado"=>true,
-                "message"=>"producto agregado correctamente"
+                "estado" => true,
+                "message" => "producto agregado correctamente "
             ]);
         return;
         
