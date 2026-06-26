@@ -22,6 +22,7 @@ if($_SERVER['REQUEST_METHOD']=='OPTIONS')
     $route->add('GET','/productos','ProductoController@getAll');
     $route->add('POST','/productos','ProductoController@add');
     $route->add('PUT','/productos/{id}','ProductoController@update');
+    $route->add('DELETE','/productos/{id}','ProductoController@delete');
 // direccion de proveedor
     $route->add('GET','/proveedores','ProveedorController@getAll'); 
     $route->add('POST','/proveedores','ProveedorController@add');

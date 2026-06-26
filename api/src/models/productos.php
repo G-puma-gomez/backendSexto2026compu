@@ -51,5 +51,12 @@ class productos
         $result=ConexionPDO::execute($sql, $valores,true);
         return $result;
      }
+    public static function delete($id)
+    {
+        $sql="DELETE FROM productos WHERE id=:id";
+        $valores=[':id'=>$id];
+        $result=ConexionPDO::execute($sql, $valores,false);
+        return $result;
+     }
      
 }

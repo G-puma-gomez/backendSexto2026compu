@@ -93,6 +93,28 @@ class ProductoController
 
     echo json_encode($producto);
      }
+    // eliminar producto
+    public function delete($id)
+    {
+        $producto=productos::delete($id);
+
+        if($producto)
+        {
+            echo json_encode(
+                [
+                "estado"=>true,
+                "message"=>"producto eliminado correctamente"
+            ]);
+        return;
+        
+    }
+
+    echo json_encode(
+        [
+            "estado"=>false,
+            "message"=>"no se pudo eliminar el producto"
+        ]);
+     }
    }
 
     
