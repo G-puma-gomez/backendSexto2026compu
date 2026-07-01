@@ -3,41 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sis.De venta y compra de compu</title>
+    <base href="http://www.2026compra.com/"/>
 </head>
 <body>
-    <h1>
-        mi primera pagina
-        hola
-        <table>
-            <script>
-                FormData 
-               caracteristicas ; informacion ; controllers ; pedido_producto ;
-               publicacion ; pedidoProductoControllers ; name = "viewport"
-            </script>
-            login <label for="content=width=device-width, initial-scale-1.0">juegosDeComputadora</label>
-        </table>
-        <code>examen de registracion</code>
-        bienvenido a la pagina de compra de computadoras
-    </h1>
-    javascript
-    <script>
-        const data = new FormData();
-        data.append('caracteristicas', 'informacion');
-        data.append('controllers', 'pedido_producto');
-        data.append('publicacion', 'pedidoProductoControllers');
-        data.append('name', 'viewport');
-        fetch('http://localhost/compraCompu/api/src/controllers/productosControllers.php', {
-            method: 'POST',
-            body: data
-        })
-        .then(response => response.json())
-        .then(data => { 
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    </script>
+    <nav>
+        <a href="#" data-view="home">Inicio</a>
+                       <a href="#" data-view="users">Usuarios</a>
+                                   <a href="#" data-view="products">Productos</a>
+    </nav>
+    <br>
+    <div id="app"></div>
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>

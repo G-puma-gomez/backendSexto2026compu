@@ -15,9 +15,7 @@ if($_SERVER['REQUEST_METHOD']=='OPTIONS')
 
     $route=new router();
 // direccion para usuario
-    $route->add('GET','/usuarios','userController@getAll');
-    $route->add('POST','/usuarios','userController@add');
-    $route->add('PUT','/usuarios/{id}','userController@update');
+    $route->add('GET','/users/{id}','userController@getById');
 // direccion de productos
     $route->add('GET','/productos','ProductoController@getAll');
     $route->add('POST','/productos','ProductoController@add');

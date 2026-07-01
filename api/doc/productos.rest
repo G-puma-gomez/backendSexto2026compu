@@ -1,8 +1,8 @@
 ### consulta de productos
-GET http://www.sexto2026compu.com/productos
+GET http://api.ventacompu/productos
 
 ### modificar productos
-PUT http://www.sexto2026compu.com/productos/1
+PUT http://api.ventacompu/productos/1
 
 {
     "codbarras":4719331302840,
@@ -11,7 +11,7 @@ PUT http://www.sexto2026compu.com/productos/1
     "stock":11
 } 
 ### agregar productos
-POST http://www.sexto2026compu.com/productos
+POST http://api.ventacompu/productos
 
 {
     "codbarras":471543784458,
@@ -21,7 +21,7 @@ POST http://www.sexto2026compu.com/productos
 }
 
 ### agregar productos con datos faltantes
-POST http://www.sexto2026compu.com/productos
+POST http://api.ventacompu/productos
 
 {
     "codbarras":471543784458,
@@ -31,4 +31,4 @@ POST http://www.sexto2026compu.com/productos
 }
 
 ### eliminar productos
-DELETE http://www.sexto2026compu.com/productos/6
+DELETE http://api.ventacompu/productos/6

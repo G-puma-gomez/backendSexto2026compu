@@ -1,9 +1,9 @@
 <?php
 include_once __DIR__."/../config/conexionDB.php";
-class usuarios
+class users
 {
     public static function all(){
-        $sql="SELECT * FROM usuarios";
+        $sql="SELECT * FROM users";
         return ConexionPDO::query($sql);
         //self::$usuarios;
     }
