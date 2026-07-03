@@ -1,19 +1,36 @@
-<h2>listado de usuarios</h2>
-    <table>
-        <tr>
-            <th>id</th>
-            <th>nombre</th>
-            <th>apellidos</th>
-            <th>email</th>
-            <th>password</th>   
-        </tr>
-        <tbody id="usersTableList">
-            <tr>
-                <td>1</td>
-                <td>Juan</td>
-                <td>Lopez</td>
-                <td>juan@email.com</td>
-                <td>mataviejas3000</td>
-            </tr>
-        </tbody>
-    </table>
+<section class="mx-auto max-w-7xl px-5 py-10 lg:px-8">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-sm font-bold uppercase tracking-[0.18em] text-[#8b7ed8]">Administracion</p>
+            <h1 class="mt-2 text-4xl font-black text-slate-800">Listado de usuarios</h1>
+        </div>
+        <button class="w-fit rounded-full bg-[#c8f7dc] px-5 py-3 text-sm font-black text-slate-800 shadow-sm">
+            Nuevo usuario
+        </button>
+    </div>
+
+    <div class="overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-[#eef0ff]">
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+                <thead class="bg-[#f2f0ff] text-xs uppercase tracking-[0.14em] text-slate-500">
+                    <tr>
+                        <th class="px-5 py-4">ID</th>
+                        <th class="px-5 py-4">Nombre</th>
+                        <th class="px-5 py-4">Apellidos</th>
+                        <th class="px-5 py-4">Email</th>
+                        <th class="px-5 py-4">Password</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableList" class="divide-y divide-slate-100">
+                    <tr>
+                        <td class="px-5 py-4 font-bold text-slate-700">1</td>
+                        <td class="px-5 py-4">Juan</td>
+                        <td class="px-5 py-4">Lopez</td>
+                        <td class="px-5 py-4">juan@email.com</td>
+                        <td class="px-5 py-4">mataviejas3000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
