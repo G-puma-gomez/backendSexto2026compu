@@ -1,8 +1,13 @@
 <?php
-if($_SERVER['REQUEST_METHOD']=='OPTIONS')
-    {
-        exit;
-    }
+header('Access-Control-Allow-Origin: http://www.2026compra.com');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Content-Type: application/json; charset=utf-8');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
     require_once "../src/router.php";
     require_once "../src/controller/userController.php";
     require_once "../src/controller/ProductoController.php";
@@ -15,7 +20,7 @@ if($_SERVER['REQUEST_METHOD']=='OPTIONS')
 
     $route=new router();
 // direccion para usuario
-    $route->add('GET','/users/{id}','userController@getById');
+    $route->add('GET','/usuarios','userController@getAll');
 // direccion de productos
     $route->add('GET','/productos','ProductoController@getAll');
     $route->add('POST','/productos','ProductoController@add');

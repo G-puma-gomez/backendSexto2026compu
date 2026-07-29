@@ -1,0 +1,2 @@
+### consulta de usuarios
+GET http://www.sexto2026compu.com/usuarios

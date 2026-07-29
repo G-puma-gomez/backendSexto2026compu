@@ -4,7 +4,7 @@ export const  getUserList = async () => {
     container.innerHTML = '<tr><td class="px-5 py-4 text-slate-500" colspan="5">Cargando usuarios...</td></tr>';
     try {
 
-        const users = await api.get('/users');
+        const users = await api.get('usuarios');
         container.innerHTML = users.map(user => `
             <tr>
                 <td class="px-5 py-4 font-bold text-slate-700">${user.id}</td>

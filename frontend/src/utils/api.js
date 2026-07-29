@@ -1,10 +1,11 @@
-const api_url = "http://api.ventacompu/api";
+const apiUrl = "http://api.ventacompu";
 
 export const api = {
     // Función para obtener datos del API
     get: async (endpoint) => {
        try { 
-        const response = await fetch(`${api_url}/${endpoint}`);
+        const url = `${apiUrl}/${endpoint.replace(/^\/+/, '')}`;
+        const response = await fetch(url);
         if (!response.ok){
             throw new Error(`error! status: ${response.status}`);
                         }
