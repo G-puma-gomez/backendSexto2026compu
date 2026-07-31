@@ -1,0 +1,18 @@
+<section class="mx-auto max-w-7xl px-5 py-10 lg:px-8">
+    <div class="mb-7 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-[#8b7ed8]">
+                <span class="icon-[mdi--account-group-outline] h-5 w-5" aria-hidden="true"></span>
+                Directorio
+            </p>
+            <h1 class="mt-2 text-4xl font-black text-slate-800">Clientes</h1>
+            <p class="mt-2 text-slate-500">Datos de contacto e historial de compras por cliente.</p>
+        </div>
+        <label class="relative block w-full sm:max-w-sm">
+            <span class="icon-[mdi--magnify] absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" aria-hidden="true"></span>
+            <input id="clientSearch" type="search" placeholder="Buscar cliente o CI" class="w-full rounded-2xl border border-[#e4defd] bg-white py-3 pl-11 pr-4 text-sm outline-none transition focus:border-[#8b7ed8] focus:ring-4 focus:ring-[#eeeaff]">
+        </label>
+    </div>
+
+    <div id="clientList" class="grid gap-5 lg:grid-cols-2"></div>
+</section>
