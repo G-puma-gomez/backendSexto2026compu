@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS DBventaCompu;
-CREATE DATABASE dbventaCompu;
-USE dbventaCompu;
+-- DROP DATABASE IF EXISTS DBventaCompu;
+-- CREATE DATABASE dbventaCompu;
+-- uSE dbventaCompu;
 CREATE TABLE clientes(
 id int not null PRIMARY KEY auto_increment,
 ci VARCHAR (20) not null,

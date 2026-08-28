@@ -6,7 +6,7 @@ PUT http://www.sexto2026compu.com/pedido/1
 {
     "cod_cliente":1,
     "fecha":"2024-06-01",
-    "estado":"procesando"
+    "estado":"procesand"
 }
 ### agregar pedido
 POST http://www.sexto2026compu.com/pedido

@@ -7,7 +7,7 @@ PUT http://www.sexto2026compu.com/pedido_producto/1
     "cod_pedido":1,
     "cod_producto":1,
     "cantidad":2,
-    "precio_unitario":7996.00,
+    "precio_unitario":7995.00,
     "descuento":0.00
 }
 ### agregar pedido_producto

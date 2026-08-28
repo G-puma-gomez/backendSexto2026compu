@@ -4,7 +4,7 @@ GET http://www.sexto2026compu.com/clientes
 PUT http://www.sexto2026compu.com/clientes/1
 
 {
-    "ci":12345678,
+    "ci":1234678,
     "nombre":"Juan",
     "apellidos":"Perez",
     "direccion":"Calle Falsa 123",
