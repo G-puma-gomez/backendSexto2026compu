@@ -15,7 +15,7 @@ class ConexionPDO
         }
         catch(\PDOException $error)
          {
-        die("ERROR".$error->getMessage());
+            throw $error;
         }
         return self::$cnn;
     }
@@ -42,9 +42,10 @@ class ConexionPDO
                     return $db->lastInsertId();
                 }
                 return $res;
-            }catch(Exception $e)
+            }catch(\PDOException $e)
             {
-                die("existe error al procesar datos ".$e->getMessage());
+                // El controlador decide cómo responder según el tipo de error.
+                throw $e;
             }
         }
 }

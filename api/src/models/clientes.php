@@ -48,5 +48,10 @@ class clientes
         $sql="INSERT INTO clientes ($stringCampos) VALUES ($valores)";
         $result=ConexionPDO::execute($sql, $valores,true);
         return $sql;}
+    public static function delete($id)
+    {
+        $sql = "DELETE FROM clientes WHERE id=:id";
+        return ConexionPDO::execute($sql, [':id' => $id], false);
+    }
      
 }

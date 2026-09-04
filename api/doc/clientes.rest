@@ -21,3 +21,6 @@ POST http://www.sexto2026compu.com/clientes
     "direccion":"Calle Falsa 123",
     "telefono":123456789
 }
+
+### eliminar cliente
+DELETE http://www.sexto2026compu.com/clientes/1

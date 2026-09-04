@@ -1,2 +1,25 @@
 ### consulta de usuarios
 GET http://www.sexto2026compu.com/usuarios
+
+### modificar usuario
+PUT http://www.sexto2026compu.com/usuarios/1
+
+{
+    "cod_cliente": "1",
+    "email": "juan.perez@example.com",
+    "password_hash": "hashed_password",
+    "estado_cuenta": "activo",
+    "ultimo_acceso": "2023-10-01 10:00:00"
+}
+
+### agregar usuario
+POST http://www.sexto2026compu.com/usuarios
+
+{
+    "cod_cliente": "2",
+    "email": "juan.perez@example.com",
+    "password_hash": "hashed_password"
+}
+
+### eliminar usuario
+DELETE http://www.sexto2026compu.com/usuarios/1

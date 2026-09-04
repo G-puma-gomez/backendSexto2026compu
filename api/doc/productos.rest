@@ -1,34 +1,25 @@
 ### consulta de productos
-GET http://api.ventacompu/productos
+GET http://www.sexto2026compu.com/productos
 
-### modificar productos
-PUT http://api.ventacompu/productos/1
-
-{
-    "codbarras":4719331302840,
-    "descripcion":"Laptop ASUS Vivobook 15 Core i5 16GB RAM 512GB SSD",
-    "precio_unitario":7996.00,
-    "stock":11
-} 
-### agregar productos
-POST http://api.ventacompu/productos
+### modificar producto
+PUT http://www.sexto2026compu.com/productos/1
 
 {
-    "codbarras":471543784458,
-    "descripcion":"oh pc gamer",
-    "precio_unitario":12576.00,
-    "stock":32
+    "codbarras": 4719331302840,
+    "descripcion": "Laptop ASUS Vivobook 15 Core i5 16GB RAM 512GB SSD",
+    "precio_unitario": 7996.00,
+    "stock": 11
 }
 
-### agregar productos con datos faltantes
-POST http://api.ventacompu/productos
+### agregar producto
+POST http://www.sexto2026compu.com/productos
 
 {
-    "codbarras":471543784458,
-    "descripcion":"oh pc gamer",
-    "precio_unitario":12576.00,
-    "stock":32
+    "codbarras": 471543784458,
+    "descripcion": "PC gamer",
+    "precio_unitario": 12576.00,
+    "stock": 32
 }
 
-### eliminar productos
-DELETE http://api.ventacompu/productos/6
+### eliminar producto
+DELETE http://www.sexto2026compu.com/productos/1

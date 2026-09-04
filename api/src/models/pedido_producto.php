@@ -48,5 +48,10 @@ class pedido_producto
         $sql="INSERT INTO pedido_producto ($stringCampos) VALUES ($valores)";
         $result=ConexionPDO::execute($sql, $valores,true);
         return $sql;}
+    public static function delete($id)
+    {
+        $sql = "DELETE FROM pedido_producto WHERE id=:id";
+        return ConexionPDO::execute($sql, [':id' => $id], false);
+    }
      
 }

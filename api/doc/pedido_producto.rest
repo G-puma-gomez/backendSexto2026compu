@@ -20,3 +20,6 @@ POST http://www.sexto2026compu.com/pedido_producto
     "precio_unitario":7996.00,
     "descuento":50.00
 }
+
+### eliminar pedido_producto
+DELETE http://www.sexto2026compu.com/pedido_producto/1

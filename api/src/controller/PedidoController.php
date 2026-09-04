@@ -84,5 +84,14 @@ class PedidoController{
 
     echo json_encode($pedido);
      }
+
+    public function delete($id)
+    {
+        $pedido = pedido::delete($id);
+        echo json_encode([
+            "estado" => (bool)$pedido,
+            "message" => $pedido ? "pedido eliminado correctamente" : "no se pudo eliminar el pedido"
+        ]);
+    }
 }
 

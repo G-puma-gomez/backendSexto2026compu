@@ -84,7 +84,15 @@ class ProveedorController{
 
     echo json_encode($proveedor);
      }
-   
+
+    public function delete($id)
+    {
+        $proveedor = proveedores::delete($id);
+        echo json_encode([
+            "estado" => (bool)$proveedor,
+            "message" => $proveedor ? "proveedor eliminado correctamente" : "no se pudo eliminar el proveedor"
+        ]);
+    }
 }
 
     

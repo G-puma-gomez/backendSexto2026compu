@@ -102,6 +102,13 @@ class PedidoProductoController{
     echo json_encode($producto);
      }
 
-    
+    public function delete($id)
+    {
+        $producto = pedido_producto::delete($id);
+        echo json_encode([
+            "estado" => (bool)$producto,
+            "message" => $producto ? "pedido_producto eliminado correctamente" : "no se pudo eliminar el pedido_producto"
+        ]);
+    }
 
 }

@@ -102,6 +102,13 @@ class ClienteController{
     echo json_encode($cliente);
      }  
 
-    
+    public function delete($id)
+    {
+        $cliente = clientes::delete($id);
+        echo json_encode([
+            "estado" => (bool)$cliente,
+            "message" => $cliente ? "cliente eliminado correctamente" : "no se pudo eliminar el cliente"
+        ]);
+    }
 
 }

@@ -16,3 +16,6 @@ POST http://www.sexto2026compu.com/pedido
     "fecha":"2024-06-01",
     "estado":"procesando"
 }
+
+### eliminar pedido
+DELETE http://www.sexto2026compu.com/pedido/1

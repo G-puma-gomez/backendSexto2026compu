@@ -48,5 +48,10 @@ class proveedores
         $sql="INSERT INTO proveedores ($stringCampos) VALUES ($valores)";
         $result=ConexionPDO::execute($sql, $valores,true);
         return $sql;}
+    public static function delete($id)
+    {
+        $sql = "DELETE FROM proveedores WHERE id=:id";
+        return ConexionPDO::execute($sql, [':id' => $id], false);
+    }
      
 }

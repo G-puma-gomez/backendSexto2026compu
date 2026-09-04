@@ -8,6 +8,9 @@ PUT http://www.sexto2026compu.com/proveedores/1
     "nombre":"Pedronosque",
     "apellidos":"abalayavu"
 }
+
+### eliminar proveedor
+DELETE http://www.sexto2026compu.com/proveedores/1
 ### agregar proveedores
 POST http://www.sexto2026compu.com/proveedores
 

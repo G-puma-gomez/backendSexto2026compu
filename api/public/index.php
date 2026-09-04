@@ -20,7 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
     $route=new router();
 // direccion para usuario
+    $route->add('GET','/','userController@login');
     $route->add('GET','/usuarios','userController@getAll');
+    $route->add('POST','/usuarios','userController@add');
+    $route->add('PUT','/usuarios/{id}','userController@update');
+    $route->add('DELETE','/usuarios/{id}','userController@delete');
 // direccion de productos
     $route->add('GET','/productos','ProductoController@getAll');
     $route->add('POST','/productos','ProductoController@add');
@@ -30,20 +34,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     $route->add('GET','/proveedores','ProveedorController@getAll'); 
     $route->add('POST','/proveedores','ProveedorController@add');
     $route->add('PUT','/proveedores/{id}','ProveedorController@update');
+    $route->add('DELETE','/proveedores/{id}','ProveedorController@delete');
 // direccion de clientes
     $route->add('GET','/clientes','ClienteController@getAll');
     $route->add('POST','/clientes','ClienteController@add');
     $route->add('PUT','/clientes/{id}','ClienteController@update');
+    $route->add('DELETE','/clientes/{id}','ClienteController@delete');
 // direccion de pedidos
     $route->add('GET','/pedido','PedidoController@getAll');
     $route->add('POST','/pedido','PedidoController@add');
     $route->add('PUT','/pedido/{id}','PedidoController@update');
+    $route->add('DELETE','/pedido/{id}','PedidoController@delete');
 // direccion de proveedor_productos
     $route->add('GET','/proveedor_producto','ProveedorProductoController@getAll');
     $route->add('POST','/proveedor_producto','ProveedorProductoController@add');
     $route->add('PUT','/proveedor_producto/{id}','ProveedorProductoController@update');
+    $route->add('DELETE','/proveedor_producto/{id}','ProveedorProductoController@delete');
 // direccion de pedido_productos
     $route->add('GET','/pedido_producto','PedidoProductoController@getAll');
     $route->add('POST','/pedido_producto','PedidoProductoController@add');
     $route->add('PUT','/pedido_producto/{id}','PedidoProductoController@update');
+    $route->add('DELETE','/pedido_producto/{id}','PedidoProductoController@delete');
     $route->run();

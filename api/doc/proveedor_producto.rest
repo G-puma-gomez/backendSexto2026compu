@@ -7,6 +7,9 @@ PUT http://www.sexto2026compu.com/proveedor_producto/1
     "cod_proveedor":1,
     "cod_producto":1
 }
+
+### eliminar proveedor_producto
+DELETE http://www.sexto2026compu.com/proveedor_producto/1
 ### agregar proveedor_producto
 POST http://www.sexto2026compu.com/proveedor_producto
 
