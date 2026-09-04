@@ -2,6 +2,7 @@
 GET http://www.sexto2026compu.com/proveedor_producto
 ### modificar proveedor_producto
 PUT http://www.sexto2026compu.com/proveedor_producto/1
+Content-Type: application/json
 
 {
     "cod_proveedor":1,
@@ -12,8 +13,9 @@ PUT http://www.sexto2026compu.com/proveedor_producto/1
 DELETE http://www.sexto2026compu.com/proveedor_producto/1
 ### agregar proveedor_producto
 POST http://www.sexto2026compu.com/proveedor_producto
+Content-Type: application/json
 
 {
-    "cod_proveedor":1,
-    "cod_producto":1
+    "cod_proveedor":10,
+    "cod_producto":10
 }

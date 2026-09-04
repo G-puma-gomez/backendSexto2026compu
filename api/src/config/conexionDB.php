@@ -31,7 +31,7 @@ class ConexionPDO
             return["ERROR"=>$e->getMessage()];
         }
     }   
-        public static function execute( $sql, array $param=[], $id)
+        public static function execute(string $sql, array $param = [], bool $id = false)
         {
             try{
                 $db=self::connect();

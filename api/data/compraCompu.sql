@@ -40,7 +40,7 @@ CREATE TABLE proveedor_producto (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     cod_proveedor INT NOT NULL,
     cod_producto INT NOT NULL,
-    FOREIGN KEY (cod_proveedor) REFERENCES proveedores(id),
+    FOREIGN KEY (cod_proveedor) REFERENCES proveedores(id) ON DELETE CASCADE,
     FOREIGN KEY (cod_producto) REFERENCES productos(id)
 ) ENGINE=InnoDB;
 

@@ -2,6 +2,7 @@
 GET http://www.sexto2026compu.com/proveedores
 ### modificar proveedores
 PUT http://www.sexto2026compu.com/proveedores/1
+Content-Type: application/json
 
 {
     "ci":12345678,
@@ -13,6 +14,7 @@ PUT http://www.sexto2026compu.com/proveedores/1
 DELETE http://www.sexto2026compu.com/proveedores/1
 ### agregar proveedores
 POST http://www.sexto2026compu.com/proveedores
+Content-Type: application/json
 
 {
     "ci":12345678,

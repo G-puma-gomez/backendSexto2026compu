@@ -2,6 +2,7 @@
 GET http://www.sexto2026compu.com/pedido
 ### modificar pedido
 PUT http://www.sexto2026compu.com/pedido/1
+Content-Type: application/json
 
 {
     "cod_cliente":1,
@@ -10,6 +11,7 @@ PUT http://www.sexto2026compu.com/pedido/1
 }
 ### agregar pedido
 POST http://www.sexto2026compu.com/pedido
+Content-Type: application/json
 
 {
     "cod_cliente":1,

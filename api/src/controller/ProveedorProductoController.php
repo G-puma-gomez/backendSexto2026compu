@@ -57,8 +57,10 @@ class ProveedorProductoController{
       //adicionar proveedor_producto
     public function add()
     {
-        $jsonData=file_get_contents('php://input');
-       $data= json_decode($jsonData,true);
+        $data = ApiResponse::input(['cod_proveedor', 'cod_producto']);
+        if ($data === null) {
+            return;
+        }
         $proveedor_producto=proveedor_producto::add($data);
 
         if($proveedor_producto)
@@ -66,7 +68,8 @@ class ProveedorProductoController{
             echo json_encode(
                 [
                 "estado"=>true,
-                "message"=>"proveedor_producto agregado correctamente"
+                "message"=>"proveedor_producto agregado correctamente",
+                "id"=>(int)$proveedor_producto
             ]);
         return;
         

@@ -84,8 +84,10 @@ class ClienteController{
       //adicionar cliente
     public function add()
     {
-        $jsonData=file_get_contents('php://input');
-       $data= json_decode($jsonData,true);
+        $data = ApiResponse::input(['ci', 'nombre', 'apellidos', 'direccion', 'telefono']);
+        if ($data === null) {
+            return;
+        }
         $cliente=clientes::add($data);
 
         if($cliente)
@@ -93,7 +95,8 @@ class ClienteController{
             echo json_encode(
                 [
                 "estado"=>true,
-                "message"=>"cliente agregado correctamente"
+                "message"=>"cliente agregado correctamente",
+                "id"=>(int)$cliente
             ]);
         return;
         

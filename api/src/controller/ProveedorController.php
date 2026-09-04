@@ -66,8 +66,10 @@ class ProveedorController{
       //adicionar proveedor
     public function add()
     {
-        $jsonData=file_get_contents('php://input');
-       $data= json_decode($jsonData,true);
+        $data = ApiResponse::input(['ci', 'nombre', 'apellidos']);
+        if ($data === null) {
+            return;
+        }
         $proveedor=proveedores::add($data);
 
         if($proveedor)
@@ -75,7 +77,8 @@ class ProveedorController{
             echo json_encode(
                 [
                 "estado"=>true,
-                "message"=>"proveedor agregado correctamente"
+                "message"=>"proveedor agregado correctamente",
+                "id"=>(int)$proveedor
             ]);
 
         return;
@@ -87,7 +90,17 @@ class ProveedorController{
 
     public function delete($id)
     {
-        $proveedor = proveedores::delete($id);
+        try {
+            $proveedor = proveedores::delete($id);
+        } catch (\PDOException $error) {
+            http_response_code(409);
+            echo json_encode([
+                "estado" => false,
+                "message" => "No se puede eliminar el proveedor porque tiene registros relacionados"
+            ]);
+            return;
+        }
+
         echo json_encode([
             "estado" => (bool)$proveedor,
             "message" => $proveedor ? "proveedor eliminado correctamente" : "no se pudo eliminar el proveedor"

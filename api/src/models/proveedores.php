@@ -33,25 +33,46 @@ class proveedores
     }
     public static function add($data)
     {
-        $campos=[];
-        $valores=[];
-        // construir datos
-        foreach($data as $columna=>$valor)
-            {
-                $campos[]="$columna=:$columna";
-                $valores[":$columna"] = $valor;
+        $campos = ['ci', 'nombre', 'apellidos'];
+        $placeholders = array_map(fn($campo) => ":$campo", $campos);
+        $valores = [];
+        foreach ($campos as $campo) {
+            $valores[":$campo"] = $data[$campo];
+        }
 
-            }
-        $stringCampos=implode(",",$campos);
-        die($stringCampos);
-        // preparamos la consulta 
-        $sql="INSERT INTO proveedores ($stringCampos) VALUES ($valores)";
-        $result=ConexionPDO::execute($sql, $valores,true);
-        return $sql;}
+        $sql = "INSERT INTO proveedores (" . implode(',', $campos) . ") VALUES (" . implode(',', $placeholders) . ")";
+        return ConexionPDO::execute($sql, $valores, true);
+    }
     public static function delete($id)
     {
-        $sql = "DELETE FROM proveedores WHERE id=:id";
-        return ConexionPDO::execute($sql, [':id' => $id], false);
+        $db = ConexionPDO::connect();
+
+        try {
+            $db->beginTransaction();
+
+            // Las filas de esta tabla solo representan la asociación entre
+            // proveedor y producto; los productos no deben eliminarse.
+            $deleteRelations = $db->prepare(
+                "DELETE FROM proveedor_producto WHERE cod_proveedor = :id"
+            );
+            $deleteRelations->execute([':id' => $id]);
+
+            $deleteProveedor = $db->prepare(
+                "DELETE FROM proveedores WHERE id = :id"
+            );
+            $deleteProveedor->execute([':id' => $id]);
+
+            $deleted = $deleteProveedor->rowCount() > 0;
+            $db->commit();
+
+            return $deleted;
+        } catch (\Throwable $error) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+
+            throw $error;
+        }
     }
      
 }

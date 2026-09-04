@@ -4,6 +4,12 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json; charset=utf-8');
 
+require_once "../src/config/ApiResponse.php";
+
+set_error_handler(function ($severity, $message, $file, $line) {
+    throw new ErrorException($message, 0, $severity, $file, $line);
+});
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
@@ -55,4 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     $route->add('POST','/pedido_producto','PedidoProductoController@add');
     $route->add('PUT','/pedido_producto/{id}','PedidoProductoController@update');
     $route->add('DELETE','/pedido_producto/{id}','PedidoProductoController@delete');
-    $route->run();
+    try {
+        $route->run();
+    } catch (Throwable $error) {
+        $status = $error instanceof PDOException && (string)$error->getCode() === '23000' ? 409 : 500;
+        ApiResponse::error(
+            $status === 409
+                ? 'No se puede completar la operación porque existen registros relacionados o duplicados.'
+                : 'Ocurrió un error al procesar la solicitud.',
+            $status
+        );
+    }

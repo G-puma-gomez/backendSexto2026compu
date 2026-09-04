@@ -33,21 +33,16 @@ class clientes
     }
     public static function add($data)
     {
-        $campos=[];
-        $valores=[];
-        // construir datos
-        foreach($data as $columna=>$valor)
-            {
-                $campos[]="$columna=:$columna";
-                $valores[":$columna"] = $valor;
+        $campos = ['ci', 'nombre', 'apellidos', 'direccion', 'telefono'];
+        $placeholders = array_map(fn($campo) => ":$campo", $campos);
+        $valores = [];
+        foreach ($campos as $campo) {
+            $valores[":$campo"] = $data[$campo];
+        }
 
-            }
-        $stringCampos=implode(",",$campos);
-        die($stringCampos);
-        // preparamos la consulta 
-        $sql="INSERT INTO clientes ($stringCampos) VALUES ($valores)";
-        $result=ConexionPDO::execute($sql, $valores,true);
-        return $sql;}
+        $sql = "INSERT INTO clientes (" . implode(',', $campos) . ") VALUES (" . implode(',', $placeholders) . ")";
+        return ConexionPDO::execute($sql, $valores, true);
+    }
     public static function delete($id)
     {
         $sql = "DELETE FROM clientes WHERE id=:id";

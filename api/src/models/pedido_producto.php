@@ -33,21 +33,16 @@ class pedido_producto
     }
     public static function add($data)
     {
-        $campos=[];
-        $valores=[];
-        // construir datos
-        foreach($data as $columna=>$valor)
-            {
-                $campos[]="$columna=:$columna";
-                $valores[":$columna"] = $valor;
+        $campos = ['cod_pedido', 'cod_producto', 'cantidad', 'precio_unitario', 'descuento'];
+        $placeholders = array_map(fn($campo) => ":$campo", $campos);
+        $valores = [];
+        foreach ($campos as $campo) {
+            $valores[":$campo"] = $data[$campo];
+        }
 
-            }
-        $stringCampos=implode(",",$campos);
-        die($stringCampos);
-        // preparamos la consulta 
-        $sql="INSERT INTO pedido_producto ($stringCampos) VALUES ($valores)";
-        $result=ConexionPDO::execute($sql, $valores,true);
-        return $sql;}
+        $sql = "INSERT INTO pedido_producto (" . implode(',', $campos) . ") VALUES (" . implode(',', $placeholders) . ")";
+        return ConexionPDO::execute($sql, $valores, true);
+    }
     public static function delete($id)
     {
         $sql = "DELETE FROM pedido_producto WHERE id=:id";

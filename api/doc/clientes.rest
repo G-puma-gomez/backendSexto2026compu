@@ -2,6 +2,7 @@
 GET http://www.sexto2026compu.com/clientes
 ### modificar clientes
 PUT http://www.sexto2026compu.com/clientes/1
+Content-Type: application/json
 
 {
     "ci":1234678,
@@ -13,6 +14,7 @@ PUT http://www.sexto2026compu.com/clientes/1
 
 ### agregar clientes
 POST http://www.sexto2026compu.com/clientes
+Content-Type: application/json
 
 {
     "ci":12345678,

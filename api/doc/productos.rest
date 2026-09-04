@@ -3,6 +3,7 @@ GET http://www.sexto2026compu.com/productos
 
 ### modificar producto
 PUT http://www.sexto2026compu.com/productos/1
+Content-Type: application/json
 
 {
     "codbarras": 4719331302840,
@@ -13,6 +14,7 @@ PUT http://www.sexto2026compu.com/productos/1
 
 ### agregar producto
 POST http://www.sexto2026compu.com/productos
+Content-Type: application/json
 
 {
     "codbarras": 471543784458,

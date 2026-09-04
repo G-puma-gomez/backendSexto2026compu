@@ -67,8 +67,10 @@ class PedidoController{
       //adicionar producto
     public function add()
     {
-        $jsonData=file_get_contents('php://input');
-       $data= json_decode($jsonData,true);
+        $data = ApiResponse::input(['cod_cliente', 'fecha', 'estado']);
+        if ($data === null) {
+            return;
+        }
         $pedido=pedido::add($data);
 
         if($pedido)
@@ -76,7 +78,8 @@ class PedidoController{
             echo json_encode(
                 [
                 "estado"=>true,
-                "message"=>"pedido agregado correctamente"
+                "message"=>"pedido agregado correctamente",
+                "id"=>(int)$pedido
             ]);
         return;
         
