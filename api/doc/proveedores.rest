@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ### eliminar proveedor
-DELETE http://www.sexto2026compu.com/proveedores/1
+DELETE http://www.sexto2026compu.com/proveedores/26
 ### agregar proveedores
 POST http://www.sexto2026compu.com/proveedores
 Content-Type: application/json

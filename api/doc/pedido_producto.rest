@@ -24,4 +24,4 @@ Content-Type: application/json
 }
 
 ### eliminar pedido_producto
-DELETE http://www.sexto2026compu.com/pedido_producto/1
+DELETE http://www.sexto2026compu.com/pedido_producto/21

@@ -18,10 +18,10 @@ POST http://www.sexto2026compu.com/usuarios
 Content-Type: application/json
 
 {
-    "cod_cliente": "2",
-    "email": "juan.perez@example.com",
-    "password_hash": "hashed_password"
+    "cod_cliente": "8",
+    "email": "ju8rweyiguir@example.com",
+    "password_hash": "hashruguoiirerd"
 }
 
 ### eliminar usuario
-DELETE http://www.sexto2026compu.com/usuarios/1
+DELETE http://www.sexto2026compu.com/usuarios/15
