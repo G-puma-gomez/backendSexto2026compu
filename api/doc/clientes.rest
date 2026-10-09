@@ -25,4 +25,4 @@ Content-Type: application/json
 }
 
 ### eliminar cliente
-DELETE http://www.sexto2026compu.com/clientes/1
+DELETE http://www.sexto2026compu.com/clientes/21
