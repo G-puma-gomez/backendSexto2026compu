@@ -1,2 +1,9 @@
 @import "tailwindcss";
-"@iconify/tailwind4";
+@plugin "@iconify/tailwind4";
+
+@layer base {
+    body.page-background {
+        background-color: #f8f7ff;
+        background-image: radial-gradient(ellipse at top left, #eeeaff, transparent 45%), radial-gradient(ellipse at bottom right, #dcfce9, transparent 40%);
+    }
+}

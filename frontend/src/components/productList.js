@@ -1,34 +1,53 @@
-import { api } from '../utils/api.js';
-
-const money = (value) => new Intl.NumberFormat('es-BO', { style: 'currency', currency: 'BOB' }).format(Number(value || 0));
-const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+import { api, isAdmin } from '../utils/api.js';
+const money = value => new Intl.NumberFormat('es-BO', { style: 'currency', currency: 'BOB' }).format(Number(value || 0));
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pictures = ['photo-1498049794561-7780e7231661', 'photo-1523275335684-37898b6baf30', 'photo-1527864550417-7fd91fc51a46', 'photo-1517336714731-489689fd1ca8', 'photo-1587831990711-23ca6441447b'];
 
 export const getProductList = async () => {
-    const container = document.getElementById('productList');
-    const summary = document.getElementById('productSummary');
-    const search = document.getElementById('productSearch');
+    const container = document.getElementById('productList'), summary = document.getElementById('productSummary'), search = document.getElementById('productSearch');
+    if (!container || !summary || !search) return;
     try {
         const products = await api.get('productos');
-        const render = (query = '') => {
-            const filtered = products.filter(product => `${product.descripcion} ${product.codbarras}`.toLowerCase().includes(query.toLowerCase()));
-            summary.textContent = `${filtered.length} producto${filtered.length === 1 ? '' : 's'} encontrado${filtered.length === 1 ? '' : 's'}`;
-            const icons = ['icon-[mdi--laptop]', 'icon-[mdi--monitor]', 'icon-[mdi--keyboard]'];
-            container.innerHTML = filtered.length ? filtered.map((product, index) => `
-                <article class="group overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-[#eef0ff] transition hover:-translate-y-1 hover:shadow-lg">
-                    <div class="relative flex h-36 items-center justify-center overflow-hidden ${['bg-[#d9f7f0]', 'bg-[#f2eaff]', 'bg-[#e4f1ff]', 'bg-[#fff0c7]'][index % 4]}">
-                        <span class="${icons[index % icons.length]} h-20 w-20 text-slate-700 transition group-hover:scale-110" aria-hidden="true"></span>
-                        <span class="absolute right-4 top-4 rounded-full bg-white/80 px-3 py-1 text-xs font-black text-slate-600">Stock: ${escapeHtml(product.stock)}</span>
-                    </div>
-                    <div class="p-5"><p class="text-xs font-bold uppercase tracking-[0.14em] text-[#8b7ed8]">Código ${escapeHtml(product.codbarras)}</p>
-                        <h2 class="mt-2 min-h-12 text-lg font-black leading-6 text-slate-800">${escapeHtml(product.descripcion)}</h2>
-                        <div class="mt-5 flex items-end justify-between"><span class="text-2xl font-black text-[#5fae7a]">${money(product.precio_unitario)}</span><span class="text-xs font-semibold text-slate-400">Precio unitario</span></div>
-                    </div>
-                </article>`).join('') : '<p class="col-span-full rounded-3xl bg-white p-8 text-center text-slate-500 shadow-sm">No encontramos productos con esa búsqueda.</p>';
+        const render = query => {
+            const filtered = products.filter(p => `${p.descripcion} ${p.codbarras}`.toLowerCase().includes(query.toLowerCase()));
+            summary.textContent = `${filtered.length} producto${filtered.length === 1 ? '' : 's'} disponible${filtered.length === 1 ? '' : 's'}`;
+            container.innerHTML = filtered.length ? filtered.map(p => { const i = products.indexOf(p); return `<article class="group cursor-pointer overflow-hidden rounded-3xl bg-white shadow-md ring-1 ring-violet-100 transition duration-300 hover:-translate-y-1 hover:shadow-xl" data-buy="${esc(p.id)}"><div class="relative h-52 overflow-hidden bg-gradient-to-br from-violet-100 via-sky-100 to-emerald-100"><img src="https://images.unsplash.com/${pictures[i % pictures.length]}?auto=format&fit=crop&w=900&q=85" alt="${esc(p.descripcion)}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy"><span class="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-slate-700">Stock: ${esc(p.stock)}</span></div><div class="p-5"><div class="flex items-start justify-between gap-2"><p class="text-xs font-bold uppercase tracking-wider text-violet-600">Código ${esc(p.codbarras)}</p>${isAdmin() ? `<button type="button" data-edit-product="${esc(p.id)}" class="rounded-lg bg-sky-100 px-3 py-1.5 text-xs font-black text-sky-800 hover:bg-sky-200">Editar</button>` : ''}</div><h2 class="mt-2 min-h-12 text-lg font-black text-slate-800">${esc(p.descripcion)}</h2><div class="mt-5 flex items-end justify-between"><span class="text-2xl font-black text-emerald-600">${money(p.precio_unitario)}</span><button class="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-black text-white transition hover:bg-violet-700">Comprar</button></div></div></article>`; }).join('') : '<p class="col-span-full rounded-3xl bg-white p-8 text-center text-slate-500 shadow-sm">No encontramos productos con esa búsqueda.</p>';
         };
-        search.addEventListener('input', event => render(event.target.value));
-        render();
-    } catch (error) {
-        summary.textContent = '';
-        container.innerHTML = '<p class="col-span-full rounded-3xl bg-white p-8 text-center text-rose-500 shadow-sm">No fue posible cargar los productos. Verifica que la API esté disponible.</p>';
-    }
+        search.oninput = event => render(event.target.value); render(search.value);
+        let createButton = document.getElementById('newProductButton');
+        // Keep product creation available if a cached view is missing the latest button.
+        if (!createButton && isAdmin()) {
+            createButton = document.createElement('button');
+            createButton.id = 'newProductButton';
+            createButton.type = 'button';
+            createButton.className = 'rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-black text-white shadow transition hover:bg-emerald-600';
+            createButton.textContent = 'Nuevo producto';
+            container.closest('section')?.querySelector('h1')?.parentElement?.after(createButton);
+        }
+        if (createButton) {
+            createButton.classList.toggle('hidden', !isAdmin());
+            createButton.onclick = () => { if (isAdmin()) editProduct(); };
+        }
+        container.onclick = event => { const edit = event.target.closest('[data-edit-product]'); if (edit) { event.stopPropagation(); if (isAdmin()) editProduct(products.find(p => String(p.id) === edit.dataset.editProduct)); return; } const card = event.target.closest('[data-buy]'); if (card) showCheckout(products.find(p => String(p.id) === card.dataset.buy)); };
+        async function editProduct(product = null) {
+            document.body.insertAdjacentHTML('beforeend', `<div id="productModal" class="fixed inset-0 z-50 grid place-items-center bg-slate-900/50 p-4"><form id="productForm" class="w-full max-w-lg space-y-4 rounded-3xl bg-white p-7 shadow-2xl"><h2 class="text-2xl font-black">${product ? 'Editar producto' : 'Nuevo producto'}</h2>${[['Código de barras','codbarras','text'],['Descripción','descripcion','text'],['Precio (Bs)','precio_unitario','number'],['Stock','stock','number']].map(([label,name,type]) => `<label class="block text-sm font-bold text-slate-600">${label}<input name="${name}" type="${type}" ${type === 'number' ? 'min="0" step="0.01"' : ''} required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal"></label>`).join('')}<p id="productError" class="hidden rounded-xl bg-rose-50 p-3 text-sm text-rose-700"></p><div class="flex justify-end gap-3"><button type="button" data-close-product class="px-4 py-3 font-bold text-slate-500">Cancelar</button><button class="rounded-xl bg-emerald-600 px-5 py-3 font-black text-white">Guardar</button></div></form></div>`);
+            const form = document.getElementById('productForm'); if (product) for (const key of ['codbarras','descripcion','precio_unitario','stock']) form.elements[key].value = product[key];
+            document.querySelector('[data-close-product]').onclick = () => document.getElementById('productModal').remove();
+            form.onsubmit = async e => { e.preventDefault(); const data = Object.fromEntries(new FormData(form)); data.precio_unitario = Number(data.precio_unitario); data.stock = Number(data.stock); try { await (product ? api.put(`productos/${product.id}`, data) : api.post('productos', data)); document.getElementById('productModal').remove(); await getProductList(); } catch (error) { const target = document.getElementById('productError'); target.textContent = error.message; target.classList.remove('hidden'); } };
+        }
+    } catch (error) { summary.textContent = ''; container.innerHTML = `<p class="col-span-full rounded-3xl bg-white p-8 text-center text-rose-600 shadow-sm">No fue posible cargar productos: ${esc(error.message)}</p>`; }
 };
+
+async function showCheckout(product) {
+    try {
+        const clients = await api.get('clientes');
+        document.body.insertAdjacentHTML('beforeend', `<div id="checkoutModal" class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-900/55 p-4"><form id="checkoutForm" class="my-6 w-full max-w-xl space-y-4 rounded-3xl bg-white p-7 shadow-2xl"><p class="text-xs font-black uppercase tracking-widest text-violet-500">Compra segura</p><h2 class="text-2xl font-black text-slate-800">${esc(product.descripcion)}</h2><p class="font-black text-emerald-600">${money(product.precio_unitario)}</p><label class="block text-sm font-bold text-slate-600">Cliente<select name="cod_cliente" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3"><option value="">Selecciona cliente</option>${clients.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)} ${esc(c.apellidos)} · CI ${esc(c.ci)}</option>`).join('')}</select></label><label class="block text-sm font-bold text-slate-600">Dirección de entrega<input name="direccion" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="Calle, zona y ciudad"></label><label class="block text-sm font-bold text-slate-600">Teléfono de contacto<input name="telefono" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="70000000"></label><label class="block text-sm font-bold text-slate-600">Cantidad<input name="cantidad" type="number" min="1" max="${Math.max(1, Number(product.stock))}" value="1" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3"></label><fieldset><legend class="mb-2 text-sm font-bold text-slate-600">Forma de pago</legend><div class="grid grid-cols-2 gap-3"><label class="cursor-pointer rounded-2xl border p-4 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50"><input type="radio" name="pago" value="Efectivo" checked> <b>Efectivo</b><span class="mt-1 block text-xs text-slate-500">Pago contra entrega</span></label><label class="cursor-pointer rounded-2xl border p-4 has-[:checked]:border-violet-500 has-[:checked]:bg-violet-50"><input type="radio" name="pago" value="QR"> <b>QR</b><span class="mt-1 block text-xs text-slate-500">Escanea el QR del comercio</span></label></div></fieldset><div id="qrPanel" class="hidden rounded-2xl bg-violet-50 p-4 text-sm text-violet-800">Solicita el QR de pago al comercio antes de confirmar el pedido.</div><p class="text-xs leading-5 text-slate-400">El sistema registra el pedido y el producto. Dirección y pago se muestran para coordinar la entrega; la API actual no almacena estos datos.</p><p id="checkoutError" class="hidden rounded-xl bg-rose-50 p-3 text-sm text-rose-700"></p><div class="flex justify-end gap-3"><button type="button" data-close-checkout class="rounded-xl px-4 py-3 font-bold text-slate-500">Cancelar</button><button class="rounded-xl bg-violet-600 px-5 py-3 font-black text-white">Confirmar pedido</button></div></form></div>`);
+        const form = document.getElementById('checkoutForm');
+        form.elements.cod_cliente.value = clients[0]?.id || '';
+        form.elements.cod_cliente.onchange = () => { const c = clients.find(x => String(x.id) === form.elements.cod_cliente.value); if (c) { form.elements.direccion.value = c.direccion || ''; form.elements.telefono.value = c.telefono || ''; } };
+        form.elements.cod_cliente.dispatchEvent(new Event('change'));
+        form.elements.pago.forEach(input => input.onchange = () => document.getElementById('qrPanel').classList.toggle('hidden', form.elements.pago.value !== 'QR'));
+        document.querySelector('[data-close-checkout]').onclick = () => document.getElementById('checkoutModal').remove();
+        form.onsubmit = async event => { event.preventDefault(); const qty = Number(form.elements.cantidad.value), error = document.getElementById('checkoutError'); try { if (qty > Number(product.stock)) throw new Error('No hay suficiente stock.'); const order = await api.post('pedido', { cod_cliente: form.elements.cod_cliente.value, fecha: new Date().toISOString().slice(0, 19).replace('T', ' '), estado: 'Pendiente' }); await api.post('pedido_producto', { cod_pedido: order.id, cod_producto: product.id, cantidad: qty, precio_unitario: product.precio_unitario, descuento: 0 }); document.getElementById('checkoutModal').innerHTML = `<div class="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-2xl"><div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-3xl text-emerald-700">✓</div><h2 class="mt-4 text-2xl font-black">¡Pedido registrado!</h2><p class="mt-2 text-slate-500">Pedido #${esc(order.id)} · Pago: ${esc(form.elements.pago.value)}. Coordina la entrega con el comercio.</p><button class="mt-6 rounded-xl bg-violet-600 px-6 py-3 font-black text-white" onclick="document.getElementById('checkoutModal').remove()">Listo</button></div>`; } catch (e) { error.textContent = e.message; error.classList.remove('hidden'); } };
+    } catch (error) { window.alert(`No fue posible iniciar la compra: ${error.message}`); }
+}

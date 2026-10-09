@@ -57,16 +57,7 @@ class userController{
                     ]);
                 return;
             }
-             if(!isset($data['ultimo_acceso']) || trim($data['ultimo_acceso'])=="")
-                  {
-                echo json_encode(
-                    [
-                        "status"=>"error",
-                        "message"=>"la fecha del último acceso es obligatoria",
-                    ]);
-                return;
-            }
-    
+        $data['password_hash'] = password_hash($data['password_hash'], PASSWORD_DEFAULT);
         $usuario=usuarios::update($id,$data);
 
         if($usuario)
@@ -127,6 +118,8 @@ class userController{
             {
                 $datosUsuario[$campo]=$data[$campo];
             }
+
+        $datosUsuario['password_hash'] = password_hash($datosUsuario['password_hash'], PASSWORD_DEFAULT);
 
         $conflicto = usuarios::findConflict($datosUsuario['cod_cliente'], $datosUsuario['email']);
         if ($conflicto) {

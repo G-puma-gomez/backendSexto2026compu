@@ -21,7 +21,13 @@ class router{
                 $pattern = str_replace(['{id}','/'], ['([0-9]+)','\/'], $route['route']);
                 $pattern = '/^'.$pattern.'$/';
                 if ($method === $route['method'] && preg_match($pattern, $uri, $matches))
-                    {  array_shift($matches);
+                    {
+                        if (in_array($method, ['POST', 'PUT', 'DELETE'], true)
+                            && preg_match('#^/(usuarios|productos|proveedores)(/|$)#', $route['route'])
+                            && !\AdminAuth::requireAdmin()) {
+                            return;
+                        }
+                        array_shift($matches);
                         list($controllerName, $methodName) = explode('@', $route['handler']);
                         $controller = new $controllerName();
                         return call_user_func_array([$controller, $methodName], $matches);

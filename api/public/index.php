@@ -22,9 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     require_once "../src/controller/PedidoController.php";
     require_once "../src/controller/ProveedorProductoController.php";
     require_once "../src/controller/PedidoProductoController.php";
+    require_once "../src/controller/AdminController.php";
+    require_once "../src/config/AdminAuth.php";
     use App\router;
 
     $route=new router();
+    $route->add('POST','/admin/login','AdminController@login');
+    $route->add('GET','/admin/session','AdminController@session');
 // direccion para usuario
     $route->add('GET','/','userController@login');
     $route->add('GET','/usuarios','userController@getAll');

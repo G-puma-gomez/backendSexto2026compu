@@ -8,10 +8,13 @@
             <h1 class="mt-2 text-4xl font-black text-slate-800">Productos disponibles</h1>
             <p class="mt-2 text-slate-500">Consulta existencias, precios y códigos de cada equipo o componente.</p>
         </div>
+        <div class="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
+        <button id="newProductButton" class="rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-black text-white shadow transition hover:bg-emerald-600">Nuevo producto</button>
         <label class="relative block w-full max-w-md">
             <span class="icon-[mdi--magnify] absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" aria-hidden="true"></span>
             <input id="productSearch" type="search" placeholder="Buscar por nombre o código" class="w-full rounded-2xl border border-[#e4defd] bg-white py-3 pl-11 pr-4 text-sm outline-none transition focus:border-[#8b7ed8] focus:ring-4 focus:ring-[#eeeaff]">
         </label>
+        </div>
     </div>
 
     <div id="productSummary" class="mb-5 text-sm font-semibold text-slate-500">Cargando productos...</div>
