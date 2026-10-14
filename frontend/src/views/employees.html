@@ -1,0 +1,24 @@
+<section class="mx-auto max-w-7xl px-5 py-10 lg:px-8">
+    <div class="mb-7 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-[#8b7ed8]">
+                <span class="icon-[mdi--account-tie-outline] h-5 w-5" aria-hidden="true"></span>
+                Equipo
+            </p>
+            <h1 class="mt-2 text-4xl font-black text-slate-800">Empleados</h1>
+            <p class="mt-2 text-slate-500">Administra los datos y cargos del personal.</p>
+        </div>
+        <button id="newEmployeeButton" type="button" class="rounded-2xl bg-violet-600 px-5 py-3 font-black text-white shadow-sm transition hover:bg-violet-700">+ Nuevo empleado</button>
+    </div>
+
+    <div class="overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-[#eef0ff]">
+        <div class="overflow-x-auto">
+            <table class="min-w-[900px] w-full text-left text-sm">
+                <thead class="bg-[#f2f0ff] text-xs uppercase tracking-[0.14em] text-slate-500">
+                    <tr><th class="px-5 py-4">ID</th><th class="px-5 py-4">CI</th><th class="px-5 py-4">Nombre</th><th class="px-5 py-4">Cargo</th><th class="px-5 py-4">Salario</th><th class="px-5 py-4">Ingreso</th><th class="px-5 py-4">Acciones</th></tr>
+                </thead>
+                <tbody id="employeeList" class="divide-y divide-slate-100"></tbody>
+            </table>
+        </div>
+    </div>
+</section>

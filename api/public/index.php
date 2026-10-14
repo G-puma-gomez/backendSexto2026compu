@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     require_once "../src/controller/PedidoController.php";
     require_once "../src/controller/ProveedorProductoController.php";
     require_once "../src/controller/PedidoProductoController.php";
+    require_once "../src/controller/EmpleadoController.php";
+    require_once "../src/controller/EmpleadoPedidoController.php";
     require_once "../src/controller/AdminController.php";
     require_once "../src/config/AdminAuth.php";
     use App\router;
@@ -65,6 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     $route->add('POST','/pedido_producto','PedidoProductoController@add');
     $route->add('PUT','/pedido_producto/{id}','PedidoProductoController@update');
     $route->add('DELETE','/pedido_producto/{id}','PedidoProductoController@delete');
+// direccion de empleados
+    $route->add('GET','/empleados','EmpleadoController@getAll');
+    $route->add('POST','/empleados','EmpleadoController@add');
+    $route->add('PUT','/empleados/{id}','EmpleadoController@update');
+    $route->add('DELETE','/empleados/{id}','EmpleadoController@delete');
+// direccion de relaciones empleado_pedido
+    $route->add('GET','/empleado_pedido','EmpleadoPedidoController@getAll');
+    $route->add('POST','/empleado_pedido','EmpleadoPedidoController@add');
+    $route->add('PUT','/empleado_pedido/{id}','EmpleadoPedidoController@update');
+    $route->add('DELETE','/empleado_pedido/{id}','EmpleadoPedidoController@delete');
     try {
         $route->run();
     } catch (Throwable $error) {

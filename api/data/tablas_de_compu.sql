@@ -55,4 +55,21 @@ INSERT INTO usuarios(cod_cliente, email, password_hash) VALUES
 (4, 'claudia.benitez@email.com', '$2y$10$e0myZXy9x...hash_simulado_4'),-- Cliente 4: Claudia
 (5, 'andres.vargas@email.com', '$2y$10$e0myZXy9x...hash_simulado_5');  -- Cliente 5: Andrés
 
+INSERT INTO empleados (ci, nombre, apellidos, cargo, salario, fecha_ingreso) VALUES
+('5421896', 'Alejandro', 'Torres Rojas', 'Administrador', 5500.00, '2025-01-10'),
+('8741235', 'Paola', 'Suárez Justiniano', 'Vendedor', 3000.00, '2025-06-15'),
+('6325147', 'Ricardo', 'Vaca Villagómez', 'Vendedor', 3000.00, '2025-08-01'),
+('4952187', 'Fernando', 'Ortiz Mamani', 'Técnico', 3500.00, '2026-02-10');
+
+INSERT INTO empleado_pedido (cod_pedido, cod_empleado, rol_en_pedido, fecha_accion) VALUES
+(1, 2, 'Vendedor - Toma de Orden', '2026-05-15 10:30:00'),
+(1, 1, 'Administrador - Facturación', '2026-05-15 10:45:00'),
+(2, 2, 'Vendedor', '2026-05-20 14:15:00'),
+(2, 4, 'Soporte Técnico - Armado', '2026-05-20 14:40:00'),
+(3, 3, 'Vendedor', '2026-06-01 09:00:00'),
+(4, 3, 'Asignado a Ventas', NOW()),
+(5, 2, 'Vendedor', '2026-06-02 18:45:00');
+
 SELECT * FROM usuarios;
+SELECT * FROM empleados;
+SELECT * FROM empleado_pedido

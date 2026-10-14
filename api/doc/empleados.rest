@@ -1,0 +1,31 @@
+### consultar empleados
+GET http://www.sexto2026compu.com/empleados
+
+### agregar empleado
+POST http://www.sexto2026compu.com/empleados
+Content-Type: application/json
+
+{
+    "ci": "12345678",
+    "nombre": "Juan",
+    "apellidos": "Perez",
+    "salario": 3500.00,
+    "cargo": "Vendedor",
+    "fecha_ingreso": "2026-01-15"
+}
+
+### modificar empleado
+PUT http://www.sexto2026compu.com/empleados/1
+Content-Type: application/json
+
+{
+    "ci": "12345678",
+    "nombre": "Juan",
+    "apellidos": "Perez",
+    "salario": 3800.00,
+    "cargo": "Supervisor",
+    "fecha_ingreso": "2026-01-15"
+}
+
+### eliminar empleado
+DELETE http://www.sexto2026compu.com/empleados/1

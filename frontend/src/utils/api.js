@@ -5,8 +5,13 @@ export const api = {
     get: async (endpoint) => {
        try { 
         const url = `${apiUrl}/${endpoint.replace(/^\/+/, '')}`;
-        const response = await fetch(url);
+        const token = sessionStorage.getItem('compraCompuAdminToken');
+        const response = await fetch(url, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         if (!response.ok){
+            if (response.status === 401 && token) {
+                sessionStorage.removeItem('compraCompuAdminToken');
+                window.dispatchEvent(new Event('admin-auth-expired'));
+            }
             throw new Error(`error! status: ${response.status}`);
                         }
         return response.json();

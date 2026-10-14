@@ -3,6 +3,7 @@ import { getProductList } from './components/productList.js?v=20261009-5'
 import { getOrderList } from './components/orderList.js'
 import { getClientList } from './components/clientList.js'
 import { getSupplierList } from './components/supplierList.js'
+import { getEmployeeList } from './components/employeeList.js'
 import { api, adminLogout, isAdmin } from './utils/api.js'
 const app = document.getElementById('app');
 let currentView = 'home';
@@ -38,6 +39,11 @@ const view = {
         app.innerHTML = await res.text();
         await getSupplierList();
     },
+    employees: async () => {
+        const res = await fetch('./src/views/employees.html', { cache: 'no-store' });
+        app.innerHTML = await res.text();
+        await getEmployeeList();
+    },
 };
 
 const setActiveLink = (currentView) => {
@@ -66,6 +72,7 @@ const updateAdminButton = () => {
     button.title = isAdmin() ? 'Cerrar sesión de administrador' : 'Iniciar sesión';
     button.classList.toggle('bg-emerald-600', isAdmin());
     button.classList.toggle('hover:bg-emerald-700', isAdmin());
+    document.querySelectorAll('.employee-nav').forEach(link => link.classList.toggle('hidden', !isAdmin()));
 };
 const renderCurrentView = async () => {
     await view[currentView]();
@@ -105,6 +112,7 @@ document.addEventListener('click', async (event) => {
 
     event.preventDefault();
     const selectedView = link.dataset.view;
+    if (selectedView === 'employees' && !isAdmin()) return;
     if (view[selectedView]) {
         currentView = selectedView;
         closeMenu();

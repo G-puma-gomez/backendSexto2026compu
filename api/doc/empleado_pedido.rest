@@ -1,0 +1,27 @@
+### consultar relaciones entre empleados y pedidos
+GET http://www.sexto2026compu.com/empleado_pedido
+
+### agregar relacion empleado-pedido
+POST http://www.sexto2026compu.com/empleado_pedido
+Content-Type: application/json
+
+{
+    "cod_pedido": 1,
+    "cod_empleado": 1,
+    "rol_en_pedido": "Vendedor",
+    "fecha_accion": "2026-01-15 10:30:00"
+}
+
+### modificar relacion empleado-pedido
+PUT http://www.sexto2026compu.com/empleado_pedido/1
+Content-Type: application/json
+
+{
+    "cod_pedido": 1,
+    "cod_empleado": 1,
+    "rol_en_pedido": "Supervisor",
+    "fecha_accion": "2026-01-15 11:00:00"
+}
+
+### eliminar relacion empleado-pedido
+DELETE http://www.sexto2026compu.com/empleado_pedido/1

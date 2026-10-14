@@ -22,8 +22,10 @@ class router{
                 $pattern = '/^'.$pattern.'$/';
                 if ($method === $route['method'] && preg_match($pattern, $uri, $matches))
                     {
-                        if (in_array($method, ['POST', 'PUT', 'DELETE'], true)
-                            && preg_match('#^/(usuarios|productos|proveedores)(/|$)#', $route['route'])
+                        $employeeRoute = preg_match('#^/empleados(/|$)#', $route['route']);
+                        $protectedMutation = in_array($method, ['POST', 'PUT', 'DELETE'], true)
+                            && preg_match('#^/(usuarios|productos|proveedores)(/|$)#', $route['route']);
+                        if (($employeeRoute || $protectedMutation)
                             && !\AdminAuth::requireAdmin()) {
                             return;
                         }

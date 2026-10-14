@@ -16,12 +16,12 @@ POST http://www.sexto2026compu.com/pedido_producto
 Content-Type: application/json
 
 {
-    "cod_pedido":1,
-    "cod_producto":1,
-    "cantidad":2,
-    "precio_unitario":7996.00,
-    "descuento":50.00
+    "cod_pedido":21,
+    "cod_producto":4,
+    "cantidad":1,
+    "precio_unitario":6786.00,
+    "descuento":45.00
 }
 
 ### eliminar pedido_producto
-DELETE http://www.sexto2026compu.com/pedido_producto/21
+DELETE http://www.sexto2026compu.com/pedido_producto/23
