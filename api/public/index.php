@@ -84,10 +84,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         $route->run();
     } catch (Throwable $error) {
         $status = $error instanceof PDOException && (string)$error->getCode() === '23000' ? 409 : 500;
+        $missingProductImageColumn = $error instanceof PDOException
+            && (string)$error->getCode() === '42S22'
+            && strpos($error->getMessage(), 'image_url') !== false;
         ApiResponse::error(
-            $status === 409
+            $missingProductImageColumn
+                ? 'La base de datos aún no tiene image_url. Ejecuta api/data/add_product_image_url.sql y vuelve a guardar.'
+                : ($status === 409
                 ? 'No se puede completar la operación porque existen registros relacionados o duplicados.'
-                : 'Ocurrió un error al procesar la solicitud.',
+                : 'Ocurrió un error al procesar la solicitud.'),
             $status
         );
     }

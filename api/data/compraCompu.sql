@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS productos(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     codbarras VARCHAR(100) NOT NULL,
     descripcion VARCHAR(100) NOT NULL,
+    image_url VARCHAR(2048) NULL,
     stock INT NOT NULL CHECK(stock >= 0),
     precio_unitario DECIMAL(10,2) NOT NULL
 ) ENGINE=InnoDB;

@@ -28,12 +28,18 @@ export const api = {
         if (result.token) sessionStorage.setItem('compraCompuAdminToken', result.token);
         return result;
     },
-    employeeLogin: async (email, password) => request('usuarios/login', 'POST', { email, password }),
+    employeeLogin: async (email, password) => {
+        const result = await request('usuarios/login', 'POST', { email, password });
+        if (result.token) sessionStorage.setItem('compraCompuEmployeeToken', result.token);
+        return result;
+    },
     adminSession: async () => request('admin/session', 'GET'),
 };
 
 export const isAdmin = () => Boolean(sessionStorage.getItem('compraCompuAdminToken'));
+export const isEmployee = () => Boolean(sessionStorage.getItem('compraCompuEmployeeToken'));
 export const adminLogout = () => sessionStorage.removeItem('compraCompuAdminToken');
+export const employeeLogout = () => sessionStorage.removeItem('compraCompuEmployeeToken');
 
 async function request(endpoint, method, data) {
     const token = sessionStorage.getItem('compraCompuAdminToken');

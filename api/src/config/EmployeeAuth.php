@@ -1,13 +1,12 @@
 <?php
 require_once __DIR__ . '/conexionDB.php';
+require_once __DIR__ . '/AdminAuth.php';
 
 class EmployeeAuth
 {
     private static function secret(): string
     {
-        $configPath = dirname(__DIR__, 2) . '/.env';
-        $config = is_file($configPath) ? parse_ini_file($configPath) : false;
-        return is_array($config) ? (string)($config['ADMIN_TOKEN_SECRET'] ?? '') : '';
+        return AdminAuth::tokenSecret();
     }
 
     public static function login(array $data): array

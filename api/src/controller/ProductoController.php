@@ -57,6 +57,15 @@ class ProductoController
                     ]); 
                 return;
             }
+
+        if (array_key_exists('image_url', $data) && $this->hasInvalidImageUrl($data['image_url'])) {
+            http_response_code(400);
+            echo json_encode(['estado' => false, 'message' => 'La imagen debe tener una URL válida con protocolo HTTP o HTTPS.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+        if (array_key_exists('image_url', $data)) {
+            $data['image_url'] = trim((string)$data['image_url']) ?: null;
+        }
     
         $producto=productos::update($id,$data);
 
@@ -120,6 +129,13 @@ class ProductoController
                 $datosProducto[$campo]=$data[$campo];
             }
 
+        if ($this->hasInvalidImageUrl($data['image_url'] ?? null)) {
+            http_response_code(400);
+            echo json_encode(['estado' => false, 'message' => 'La imagen debe tener una URL válida con protocolo HTTP o HTTPS.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+        $datosProducto['image_url'] = trim((string)($data['image_url'] ?? '')) ?: null;
+
         $producto = productos::add($datosProducto);
 
         if($producto)
@@ -157,6 +173,14 @@ class ProductoController
             "message"=>"no se pudo eliminar el producto"
         ]);
      }
+
+    private function hasInvalidImageUrl($value): bool
+    {
+        $url = trim((string)$value);
+        if ($url === '') return false;
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) return true;
+        return !in_array(strtolower((string)parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true);
+    }
    }
 
     

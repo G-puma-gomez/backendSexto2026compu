@@ -1,1 +1,2 @@
 .env
+api/src/config/admin.credentials.php

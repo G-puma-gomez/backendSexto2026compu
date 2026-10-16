@@ -4,9 +4,14 @@ class AdminAuth
 {
     private static function config(): array
     {
-        $path = dirname(__DIR__, 2) . '/.env';
-        $config = is_file($path) ? parse_ini_file($path) : false;
+        $path = __DIR__ . '/admin.credentials.php';
+        $config = is_file($path) ? require $path : false;
         return is_array($config) ? $config : [];
+    }
+
+    public static function tokenSecret(): string
+    {
+        return (string)(self::config()['ADMIN_TOKEN_SECRET'] ?? '');
     }
 
     public static function login(array $data): array
@@ -14,7 +19,7 @@ class AdminAuth
         $config = self::config();
         $username = (string)($config['ADMIN_USER'] ?? '');
         $passwordHash = (string)($config['ADMIN_PASSWORD_HASH'] ?? '');
-        $secret = (string)($config['ADMIN_TOKEN_SECRET'] ?? '');
+        $secret = self::tokenSecret();
         if ($username === '' || $passwordHash === '' || $secret === ''
             || !hash_equals($username, (string)($data['username'] ?? ''))
             || !password_verify((string)($data['password'] ?? ''), $passwordHash)) {
@@ -40,9 +45,10 @@ class AdminAuth
 
         $parts = explode('.', $matches[1]);
         $config = self::config();
-        if (count($parts) !== 2 || empty($config['ADMIN_TOKEN_SECRET'])) return self::unauthorized();
+        $secret = self::tokenSecret();
+        if (count($parts) !== 2 || $secret === '') return self::unauthorized();
         [$payload, $signature] = $parts;
-        $expected = self::base64url(hash_hmac('sha256', $payload, $config['ADMIN_TOKEN_SECRET'], true));
+        $expected = self::base64url(hash_hmac('sha256', $payload, $secret, true));
         $decoded = json_decode(self::base64urlDecode($payload), true);
         if (!hash_equals($expected, $signature) || !is_array($decoded)
             || (int)($decoded['exp'] ?? 0) < time()
