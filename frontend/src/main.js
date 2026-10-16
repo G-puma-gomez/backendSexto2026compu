@@ -68,8 +68,8 @@ const openMenu = () => {
 };
 const updateAdminButton = () => {
     const button = document.getElementById('adminButton');
-    button.textContent = isAdmin() ? 'Administrador: P_Gabriel' : 'Inicio de sesión';
-    button.title = isAdmin() ? 'Cerrar sesión de administrador' : 'Iniciar sesión';
+    button.textContent = isAdmin() ? 'Cerrar sesión' : 'Inicio de sesión';
+    button.title = isAdmin() ? 'Cerrar sesión' : 'Iniciar sesión';
     button.classList.toggle('bg-emerald-600', isAdmin());
     button.classList.toggle('hover:bg-emerald-700', isAdmin());
     document.querySelectorAll('.employee-nav').forEach(link => link.classList.toggle('hidden', !isAdmin()));
@@ -80,7 +80,7 @@ const renderCurrentView = async () => {
 };
 const showAdminLogin = () => {
     if (document.getElementById('adminLoginModal')) return;
-    document.body.insertAdjacentHTML('beforeend', `<div id="adminLoginModal" class="fixed inset-0 z-50 grid place-items-center bg-slate-950/55 p-4"><form id="adminLoginForm" class="w-full max-w-md space-y-5 rounded-3xl bg-white p-7 shadow-2xl"><div class="grid h-14 w-14 place-items-center rounded-2xl bg-violet-100 text-2xl text-violet-700"><span class="icon-[mdi--shield-account] h-8 w-8" aria-hidden="true"></span></div><div><p class="text-xs font-black uppercase tracking-[0.16em] text-violet-500">Acceso protegido</p><h2 class="mt-1 text-2xl font-black text-slate-800">Inicio de sesión administrador</h2></div><label class="block text-sm font-bold text-slate-600">Usuario<input name="username" autocomplete="username" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-violet-500"></label><label class="block text-sm font-bold text-slate-600">Contraseña<input name="password" type="password" autocomplete="current-password" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-violet-500"></label><p id="adminLoginError" class="hidden rounded-xl bg-rose-50 p-3 text-sm text-rose-700"></p><div class="flex justify-end gap-3"><button type="button" id="cancelAdminLogin" class="rounded-xl px-4 py-3 font-bold text-slate-500">Cancelar</button><button class="rounded-xl bg-violet-600 px-5 py-3 font-black text-white hover:bg-violet-700">Iniciar sesión</button></div></form></div>`);
+    document.body.insertAdjacentHTML('beforeend', `<div id="adminLoginModal" class="fixed inset-0 z-50 grid place-items-center bg-slate-950/55 p-4"><form id="adminLoginForm" class="w-full max-w-md space-y-5 rounded-3xl bg-white p-7 shadow-2xl"><div class="grid h-14 w-14 place-items-center rounded-2xl bg-violet-100 text-2xl text-violet-700"><span class="icon-[mdi--account] h-8 w-8" aria-hidden="true"></span></div><div><h2 class="text-2xl font-black text-slate-800">Inicio de sesión</h2></div><label class="block text-sm font-bold text-slate-600">Usuario / correo electrónico<input name="username" autocomplete="username" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-violet-500"></label><label class="block text-sm font-bold text-slate-600">Contraseña<input name="password" type="password" autocomplete="current-password" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-violet-500"></label><p id="adminLoginError" class="hidden rounded-xl bg-rose-50 p-3 text-sm text-rose-700"></p><div class="flex justify-end gap-3"><button type="button" id="cancelAdminLogin" class="rounded-xl px-4 py-3 font-bold text-slate-500">Cancelar</button><button class="rounded-xl bg-violet-600 px-5 py-3 font-black text-white hover:bg-violet-700">Iniciar sesión</button></div></form></div>`);
     const modal = document.getElementById('adminLoginModal');
     document.getElementById('cancelAdminLogin').onclick = () => modal.remove();
     document.getElementById('adminLoginForm').onsubmit = async event => {

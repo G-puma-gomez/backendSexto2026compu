@@ -10,7 +10,7 @@ Content-Type: application/json
     "nombre": "Juan",
     "apellidos": "Perez",
     "salario": 3500.00,
-    "cargo": "Vendedor",
+    "permiso": "Vendedor",
     "fecha_ingreso": "2026-01-15"
 }
 
@@ -23,7 +23,7 @@ Content-Type: application/json
     "nombre": "Juan",
     "apellidos": "Perez",
     "salario": 3800.00,
-    "cargo": "Supervisor",
+    "permiso": "Supervisor",
     "fecha_ingreso": "2026-01-15"
 }
 

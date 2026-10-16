@@ -1,6 +1,17 @@
 <?php
 require_once "../src/models/users.php";
+require_once __DIR__ . '/../config/EmployeeAuth.php';
 class userController{
+    public function login()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+            ApiResponse::error('El cuerpo de la solicitud debe ser JSON válido.', 400);
+            return;
+        }
+        echo json_encode(EmployeeAuth::login($data), JSON_UNESCAPED_UNICODE);
+    }
+
     public function getAll()
     {
         $usuarios=usuarios::all();

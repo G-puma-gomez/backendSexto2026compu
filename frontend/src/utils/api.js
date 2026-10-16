@@ -28,6 +28,7 @@ export const api = {
         if (result.token) sessionStorage.setItem('compraCompuAdminToken', result.token);
         return result;
     },
+    employeeLogin: async (email, password) => request('usuarios/login', 'POST', { email, password }),
     adminSession: async () => request('admin/session', 'GET'),
 };
 

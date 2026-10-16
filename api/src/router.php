@@ -22,11 +22,10 @@ class router{
                 $pattern = '/^'.$pattern.'$/';
                 if ($method === $route['method'] && preg_match($pattern, $uri, $matches))
                     {
-                        $employeeRoute = preg_match('#^/empleados(/|$)#', $route['route']);
-                        $protectedMutation = in_array($method, ['POST', 'PUT', 'DELETE'], true)
+                        $publicLogin = $route['route'] === '/usuarios/login' && $method === 'POST';
+                        $protectedMutation = !$publicLogin && in_array($method, ['POST', 'PUT', 'DELETE'], true)
                             && preg_match('#^/(usuarios|productos|proveedores)(/|$)#', $route['route']);
-                        if (($employeeRoute || $protectedMutation)
-                            && !\AdminAuth::requireAdmin()) {
+                        if ($protectedMutation && !\AdminAuth::requireAdmin()) {
                             return;
                         }
                         array_shift($matches);

@@ -26,12 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     require_once "../src/controller/EmpleadoPedidoController.php";
     require_once "../src/controller/AdminController.php";
     require_once "../src/config/AdminAuth.php";
+    require_once "../src/config/EmployeeAuth.php";
     use App\router;
 
     $route=new router();
     $route->add('POST','/admin/login','AdminController@login');
     $route->add('GET','/admin/session','AdminController@session');
 // direccion para usuario
+    $route->add('POST','/usuarios/login','userController@login');
     $route->add('GET','/','userController@login');
     $route->add('GET','/usuarios','userController@getAll');
     $route->add('POST','/usuarios','userController@add');
@@ -68,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     $route->add('PUT','/pedido_producto/{id}','PedidoProductoController@update');
     $route->add('DELETE','/pedido_producto/{id}','PedidoProductoController@delete');
 // direccion de empleados
+    $route->add('POST','/empleados/login','EmpleadoController@login');
     $route->add('GET','/empleados','EmpleadoController@getAll');
     $route->add('POST','/empleados','EmpleadoController@add');
     $route->add('PUT','/empleados/{id}','EmpleadoController@update');

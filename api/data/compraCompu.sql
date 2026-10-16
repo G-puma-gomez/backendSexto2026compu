@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS empleados(
     ci VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(50) NOT NULL,
     apellidos VARCHAR(50) NOT NULL,
-    cargo VARCHAR(50) DEFAULT 'Vendedor',
+    permiso VARCHAR(50) DEFAULT 'Vendedor',
     salario DECIMAL(10,2) NOT NULL CHECK(salario > 0),
     fecha_ingreso DATE DEFAULT (CURRENT_DATE)
 ) ENGINE=InnoDB;
 
 -- 2. Tabla de Usuarios (CORREGIDA: Ahora referenica a Empleados)
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE IF NOT EXISTS usuarios(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     cod_empleado INT NOT NULL UNIQUE, -- Cambio de cliente a empleado
     email VARCHAR(100) NOT NULL UNIQUE,
