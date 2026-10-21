@@ -2,6 +2,42 @@
 require_once "../src/models/productos.php";
 class ProductoController
 {
+    public function uploadImage()
+    {
+        if (!AdminAuth::requireAdmin()) return;
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            http_response_code(400);
+            echo json_encode(['estado' => false, 'message' => 'Selecciona una imagen válida.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+        $file = $_FILES['image'];
+        if ($file['size'] > 5 * 1024 * 1024) {
+            http_response_code(400);
+            echo json_encode(['estado' => false, 'message' => 'La imagen no puede superar 5 MB.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+        $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
+        $extensions = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif'];
+        if (!isset($extensions[$mime])) {
+            http_response_code(400);
+            echo json_encode(['estado' => false, 'message' => 'Usa una imagen JPG, PNG, WEBP o GIF.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+        $directory = __DIR__ . '/../../public/uploads';
+        if (!is_dir($directory) && !mkdir($directory, 0755, true)) {
+            http_response_code(500);
+            echo json_encode(['estado' => false, 'message' => 'No se pudo preparar la carpeta de imágenes.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+        $filename = bin2hex(random_bytes(16)) . '.' . $extensions[$mime];
+        if (!move_uploaded_file($file['tmp_name'], $directory . '/' . $filename)) {
+            http_response_code(500);
+            echo json_encode(['estado' => false, 'message' => 'No se pudo guardar la imagen.'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+        echo json_encode(['estado' => true, 'url' => 'http://api.ventacompu/uploads/' . $filename], JSON_UNESCAPED_UNICODE);
+    }
+
     public function getAll()
     {
         $producto=productos::all();

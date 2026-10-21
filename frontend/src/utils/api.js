@@ -21,6 +21,15 @@ export const api = {
         }
     },
     post: async (endpoint, data) => request(endpoint, 'POST', data),
+    uploadImage: async file => {
+        const token = sessionStorage.getItem('compraCompuAdminToken');
+        const body = new FormData();
+        body.append('image', file);
+        const response = await fetch(`${apiUrl}/productos/imagen`, { method: 'POST', headers: token ? { Authorization: `Bearer ${token}` } : {}, body });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.estado === false) throw new Error(result.message || `No se pudo subir la imagen (${response.status})`);
+        return result;
+    },
     put: async (endpoint, data) => request(endpoint, 'PUT', data),
     delete: async (endpoint) => request(endpoint, 'DELETE'),
     adminLogin: async (username, password) => {

@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     $route->add('DELETE','/usuarios/{id}','userController@delete');
 // direccion de productos
     $route->add('GET','/productos','ProductoController@getAll');
+    $route->add('POST','/productos/imagen','ProductoController@uploadImage');
     $route->add('POST','/productos','ProductoController@add');
     $route->add('PUT','/productos/{id}','ProductoController@update');
     $route->add('DELETE','/productos/{id}','ProductoController@delete');

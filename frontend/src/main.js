@@ -1,5 +1,5 @@
 import { getUserList } from './components/userList.js?v=20261009-5'
-import { getProductList } from './components/productList.js?v=20261009-5'
+import { getProductList } from './components/productList.js?v=20261021-1'
 import { getOrderList } from './components/orderList.js'
 import { getClientList } from './components/clientList.js'
 import { getSupplierList } from './components/supplierList.js'
