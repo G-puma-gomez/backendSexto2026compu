@@ -1,5 +1,10 @@
 <?php
-header('Access-Control-Allow-Origin: http://www.2026compra.com');
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigin = $origin === 'http://www.2026compra.com'
+    || $origin === 'https://www.2026compra.com'
+    || (preg_match('#^https?://(localhost|127\.0\.0\.1|10\.(\d{1,3}\.){2}\d{1,3}|192\.168\.(\d{1,3}\.){1}\d{1,3}|172\.(1[6-9]|2\d|3[01])\.(\d{1,3}\.){1}\d{1,3})(:\d+)?$#', $origin) === 1);
+if ($allowedOrigin) header('Access-Control-Allow-Origin: ' . $origin);
+header('Vary: Origin');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json; charset=utf-8');

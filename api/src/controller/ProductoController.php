@@ -35,7 +35,9 @@ class ProductoController
             echo json_encode(['estado' => false, 'message' => 'No se pudo guardar la imagen.'], JSON_UNESCAPED_UNICODE);
             return;
         }
-        echo json_encode(['estado' => true, 'url' => 'http://api.ventacompu/uploads/' . $filename], JSON_UNESCAPED_UNICODE);
+        $apiPrefix = strpos(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/api/') === 0 ? '/api' : '';
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        echo json_encode(['estado' => true, 'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . $apiPrefix . '/uploads/' . $filename], JSON_UNESCAPED_UNICODE);
     }
 
     public function getAll()
