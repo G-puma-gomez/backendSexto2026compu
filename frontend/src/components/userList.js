@@ -1,7 +1,7 @@
 import { api, isAdmin } from '../utils/api.js';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const field = (label, name, type = 'text', required = true) => `<label class="block text-sm font-bold text-slate-600">${label}<input name="${name}" type="${type}" ${required ? 'required' : ''} class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100"></label>`;
+const field = (label, name, type = 'text', required = true) => `<label class="block text-sm font-bold text-slate-600">${label}${type === 'password' ? `<div class="relative mt-2"><input name="${name}" type="password" ${required ? 'required' : ''} autocomplete="new-password" class="w-full rounded-xl border border-slate-200 px-4 py-3 pr-20 font-normal outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100"><button type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false" class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-bold text-violet-700 hover:bg-violet-50">Mostrar</button></div>` : `<input name="${name}" type="${type}" ${required ? 'required' : ''} class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100">`}</label>`;
 
 export const getUserList = async () => {
     const body = document.getElementById('usersTableList');

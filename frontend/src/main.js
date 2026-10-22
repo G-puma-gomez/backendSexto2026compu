@@ -111,7 +111,7 @@ const showAdminLogin = () => {
                 <button type="button" id="cancelAdminLogin" aria-label="Cerrar" class="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-xl bg-slate-100 text-xl font-bold text-slate-500 transition hover:bg-violet-100 hover:text-violet-700">×</button>
                 <div><span class="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-violet-100 to-sky-100 text-2xl text-violet-700"><span class="icon-[mdi--account] h-8 w-8" aria-hidden="true"></span></span><p class="mt-7 text-sm font-bold uppercase tracking-widest text-violet-600">Bienvenido</p><h2 class="mt-1 text-3xl font-black text-slate-800">Inicia sesión</h2><p class="mt-2 text-slate-500">Ingresa a tu cuenta para continuar.</p></div>
                 <label class="block text-sm font-bold text-slate-600">Usuario o correo electrónico<input name="username" autocomplete="username" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3.5 font-normal outline-none focus:border-violet-500" placeholder="nombre@correo.com"></label>
-                <label class="block text-sm font-bold text-slate-600">Contraseña<input name="password" type="password" autocomplete="current-password" required class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3.5 font-normal outline-none focus:border-violet-500" placeholder="Ingresa tu contraseña"></label>
+                <label class="block text-sm font-bold text-slate-600">Contraseña<div class="relative mt-2"><input name="password" type="password" autocomplete="current-password" required class="w-full rounded-xl border border-slate-200 px-4 py-3.5 pr-20 font-normal outline-none focus:border-violet-500" placeholder="Ingresa tu contraseña"><button type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false" class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-bold text-violet-700 hover:bg-violet-50">Mostrar</button></div></label>
                 <p id="adminLoginError" class="hidden rounded-xl bg-rose-50 p-3 text-sm text-rose-700"></p>
                 <button class="rounded-xl bg-gradient-to-r from-violet-600 to-[#8875e8] px-5 py-3.5 font-black text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:from-violet-700 hover:to-violet-600">Iniciar sesión</button>
                 <p class="text-center text-xs text-slate-400">CompraCompu <span class="px-1 text-violet-300">•</span> Gestión de tecnología</p>
@@ -148,6 +148,16 @@ const showAdminLogin = () => {
 document.getElementById('menuToggle').onclick = () => document.getElementById('menuToggle').getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
 document.getElementById('menuClose').onclick = closeMenu;
 document.getElementById('menuOverlay').onclick = closeMenu;
+document.addEventListener('click', event => {
+    const button = event.target.closest('[data-password-toggle]');
+    if (!button) return;
+    const input = button.parentElement.querySelector('input');
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    button.textContent = show ? 'Ocultar' : 'Mostrar';
+    button.setAttribute('aria-label', `${show ? 'Ocultar' : 'Mostrar'} contraseña`);
+    button.setAttribute('aria-pressed', String(show));
+});
 window.addEventListener('resize', () => { if (window.matchMedia('(min-width: 1024px)').matches) closeMenu(); });
 document.getElementById('adminButton').onclick = async () => {
     if (isAdmin() || isEmployee() || sessionStorage.getItem('compraCompuProfile')) {
