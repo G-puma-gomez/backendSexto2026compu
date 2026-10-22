@@ -1,2 +1,4 @@
 .env
 api/src/config/admin.credentials.php
+node_modules/
+frontend/node_modules/
