@@ -1,4 +1,3 @@
-
 <?php
 require_once "../src/models/proveedor_producto.php";
 class ProveedorProductoController{
