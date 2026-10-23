@@ -1,9 +1,5 @@
-const isLocalAddress = hostname => hostname === 'localhost' || hostname === '127.0.0.1' || /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(hostname);
-const isCompraCompuDomain = /(^|\.)2026compra\.com$/i.test(window.location.hostname);
-const apiUrl = isLocalAddress(window.location.hostname) || isCompraCompuDomain
-    ? `${window.location.origin}/api`
+const apiUrl = 'https://backendsexto2026compu.onrender.com';
     //: 'http://api.ventacompu';
-       : 'https://backendsexto2026compu.onrender.com';
 
 export const api = {
     // Función para obtener datos del API
