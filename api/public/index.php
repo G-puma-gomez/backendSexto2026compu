@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     $route->add('GET','/admin/session','AdminController@session');
 // direccion para usuario
     $route->add('POST','/usuarios/login','userController@login');
-    $route->add('GET','/','userController@login');
+    $route->add('GET','/','userController@apiStatus');
     $route->add('GET','/usuarios','userController@getAll');
     $route->add('POST','/usuarios','userController@add');
     $route->add('PUT','/usuarios/{id}','userController@update');

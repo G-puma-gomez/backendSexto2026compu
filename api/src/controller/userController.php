@@ -2,6 +2,14 @@
 require_once "../src/models/users.php";
 require_once __DIR__ . '/../config/EmployeeAuth.php';
 class userController{
+    public function apiStatus()
+    {
+        echo json_encode([
+            'estado' => true,
+            'message' => 'API de CompraCompu disponible.',
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
     public function login()
     {
         $data = json_decode(file_get_contents('php://input'), true);
