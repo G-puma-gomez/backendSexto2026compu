@@ -3,6 +3,8 @@ require_once __DIR__ . '/conexionDB.php';
 
 class AdminAuth
 {
+    // Acceso temporal abierto solicitado para el despliegue de Render.
+    private const TEMPORARY_ADMIN_KEY = 'compra-compu-temporary-admin-access-2026';
     private static ?array $employeeColumns = null;
 
     private static function employeeColumns(): array
@@ -50,49 +52,17 @@ class AdminAuth
     {
         $login = trim((string)($data['username'] ?? $data['email'] ?? ''));
         $password = (string)($data['password'] ?? '');
-        if ($login === '' || $password === '') {
-            http_response_code(400);
-            return ['estado' => false, 'message' => 'Correo y contraseña son obligatorios.'];
-        }
-
-        $employee = self::findEmployee($login);
-        $role = strtolower(trim((string)($employee['permiso'] ?? '')));
-        $storedPassword = (string)($employee['password_hash'] ?? '');
-        $validPassword = $storedPassword !== '' && (password_verify($password, $storedPassword) || hash_equals($storedPassword, $password));
-
-        if (!$employee || !in_array($role, ['administrador', 'admin'], true) || !$validPassword
-            || (($employee['estado_cuenta'] ?? 'Activo') !== 'Activo')) {
-            http_response_code(401);
-            return ['estado' => false, 'message' => 'Correo o contraseña incorrectos, o la cuenta no tiene permiso de administrador.'];
-        }
-
-        // Permite credenciales existentes en texto y las convierte a hash después del primer acceso.
-        if (!password_get_info($storedPassword)['algo']) {
-            $storedPassword = password_hash($password, PASSWORD_DEFAULT);
-            if (self::usesEmployeeAccounts()) {
-                ConexionPDO::execute('UPDATE empleados SET password_hash=:hash WHERE id=:id', [':hash' => $storedPassword, ':id' => $employee['id']]);
-            } else {
-                ConexionPDO::execute('UPDATE usuarios SET password_hash=:hash WHERE cod_empleado=:id', [':hash' => $storedPassword, ':id' => $employee['id']]);
-            }
-        }
-
+        // La cuenta y los permisos se omiten temporalmente: los datos ingresados no se validan.
         $payload = self::base64url(json_encode([
-            'sub' => (int)$employee['id'],
+            'sub' => 0,
             'role' => 'Administrador',
             'exp' => time() + 28800,
         ], JSON_UNESCAPED_SLASHES));
-        $token = $payload . '.' . self::signature($payload, $storedPassword);
+        $token = $payload . '.' . self::signature($payload, self::TEMPORARY_ADMIN_KEY);
         return [
             'estado' => true,
             'token' => $token,
-            'username' => $employee['email'],
-            'employee' => [
-                'id' => (int)$employee['id'],
-                'nombre' => $employee['nombre'],
-                'apellidos' => $employee['apellidos'],
-                'permiso' => $employee['permiso'],
-                'email' => $employee['email'],
-            ],
+            'username' => $login ?: 'Administrador',
         ];
     }
 
@@ -108,14 +78,12 @@ class AdminAuth
         if (count($parts) !== 2) return self::unauthorized();
         [$payload, $signature] = $parts;
         $decoded = json_decode(self::base64urlDecode($payload), true);
-        $employeeId = (int)($decoded['sub'] ?? 0);
-        if (!is_array($decoded) || $employeeId < 1 || ($decoded['role'] ?? '') !== 'Administrador'
+        if (!is_array($decoded) || ($decoded['role'] ?? '') !== 'Administrador'
             || (int)($decoded['exp'] ?? 0) < time()) {
             return self::unauthorized();
         }
 
-        $passwordHash = self::passwordHashFor($employeeId);
-        if ($passwordHash === '' || !hash_equals(self::signature($payload, $passwordHash), $signature)) {
+        if (!hash_equals(self::signature($payload, self::TEMPORARY_ADMIN_KEY), $signature)) {
             return self::unauthorized();
         }
         return true;
