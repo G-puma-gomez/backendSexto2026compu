@@ -6,7 +6,16 @@ class AdminAuth
     {
         $path = __DIR__ . '/admin.credentials.php';
         $config = is_file($path) ? require $path : false;
-        return is_array($config) ? $config : [];
+        $config = is_array($config) ? $config : [];
+
+        foreach (['ADMIN_USER', 'ADMIN_PASSWORD_HASH', 'ADMIN_TOKEN_SECRET'] as $key) {
+            $value = getenv($key);
+            if ($value !== false && $value !== '') {
+                $config[$key] = $value;
+            }
+        }
+
+        return $config;
     }
 
     public static function tokenSecret(): string

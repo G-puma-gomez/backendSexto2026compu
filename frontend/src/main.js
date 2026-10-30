@@ -7,11 +7,36 @@ import { getEmployeeList } from './components/employeeList.js'
 import { api, adminLogout, employeeLogout, isAdmin, isEmployee } from './utils/api.js'
 const app = document.getElementById('app');
 let currentView = 'home';
+const loadDashboardData = async () => {
+    const metrics = [
+        ['dashboardUsers', 'usuarios'],
+        ['dashboardProducts', 'productos'],
+        ['dashboardOrders', 'pedido'],
+        ['dashboardClients', 'clientes'],
+    ];
+    const status = document.getElementById('dashboardDataStatus');
+    if (!status) return;
+
+    try {
+        const results = await Promise.all(metrics.map(([, endpoint]) => api.get(endpoint)));
+        results.forEach((items, index) => {
+            if (!Array.isArray(items)) throw new Error('La API devolvió un formato de datos inesperado.');
+            document.getElementById(metrics[index][0]).textContent = String(items.length);
+        });
+        status.textContent = 'Resumen actualizado con datos del backend.';
+    } catch (error) {
+        metrics.forEach(([elementId]) => {
+            document.getElementById(elementId).textContent = '—';
+        });
+        status.textContent = `No se pudo cargar el resumen desde el backend. ${error.message}`;
+    }
+};
 const view = {
     home: async () => {
         const res = await fetch('./src/views/home.html', { cache: 'no-store' });
 
         app.innerHTML = await res.text();
+        await loadDashboardData();
 
     },
     users: async () => {

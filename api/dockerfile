@@ -2,7 +2,9 @@ FROM php:8.3-apache
 
 # 1. Instalar extensiones y activar modulo rewrite
 RUN docker-php-ext-install pdo_mysql \
-    && a2enmod rewrite
+    && a2enmod rewrite \
+    && printf '<Directory /var/www/html/public>\n    AllowOverride All\n</Directory>\n' > /etc/apache2/conf-available/public-htaccess.conf \
+    && a2enconf public-htaccess
 
 # 2. Configurar correctamente la raiz del documento en Apache
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public

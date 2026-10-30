@@ -1,18 +1,5 @@
-# 1. Configurar Cabeceras Globales de CORS
-<IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "https://onrender.com"
-    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept, Origin"
-    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
-    Header set Access-Control-Allow-Credentials "true"
-</IfModule>
-
 RewriteEngine On
 
-# 2. Interceptar peticiones OPTIONS (Preflight) inmediatamente y responder 200 sin tocar PHP
-RewriteCond %{REQUEST_METHOD} OPTIONS
-RewriteRule ^(.*)$ - [R=200,L]
-
-# 3. Enrutamiento normal de la API hacia index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+RewriteRule ^ index.php [QSA,L]

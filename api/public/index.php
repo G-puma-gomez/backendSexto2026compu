@@ -1,16 +1,27 @@
 <?php
-// 1. Definir el origen permitido (Tu frontend en Render)
-$origin = "https://backendsexto2026compu-1.onrender.com";
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigins = [
+    'https://backendsexto2026compu-1.onrender.com',
+    'http://localhost',
+    'http://127.0.0.1',
+];
+$configuredOrigin = getenv('FRONTEND_ORIGIN');
+if ($configuredOrigin !== false && $configuredOrigin !== '') {
+    $allowedOrigins[] = $configuredOrigin;
+}
+$isLocalOrigin = preg_match('#^https?://(localhost|127\.0\.0\.1)(:\d+)?$#i', $origin) === 1;
+$originAllowed = $origin !== '' && (in_array($origin, $allowedOrigins, true) || $isLocalOrigin);
 
-// 2. Forzar las cabeceras CORS directamente desde PHP
-header("Access-Control-Allow-Origin: " . $origin);
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Access-Control-Allow-Credentials: true");
+header('Vary: Origin');
+if ($originAllowed) {
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+    header('Access-Control-Allow-Credentials: true');
+}
 
-// 3. Interceptar de inmediato la petición OPTIONS (Preflight) y finalizar la ejecución
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+    http_response_code($originAllowed ? 204 : 403);
     exit();
 }
 
@@ -32,10 +43,6 @@ set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
     require_once "../src/router.php";
     require_once "../src/controller/userController.php";
     require_once "../src/controller/ProductoController.php";
