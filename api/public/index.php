@@ -1,18 +1,30 @@
 <?php
-// Permitir el origen exacto de tu frontend en Render
-header("Access-Control-Allow-Origin: https://backendsexto2026compu-1.onrender.com");
+// 1. Definir el origen permitido (Tu frontend en Render)
+$origin = "https://backendsexto2026compu-1.onrender.com";
+
+// 2. Forzar las cabeceras CORS directamente desde PHP
+header("Access-Control-Allow-Origin: " . $origin);
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Access-Control-Allow-Credentials: true");
 
-// Manejo estricto de peticiones de pre-vuelo (Preflight OPTIONS)
+// 3. Interceptar de inmediato la petición OPTIONS (Preflight) y finalizar la ejecución
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // Limpia cualquier salida o cabecera que se haya colado antes
-    if (header_sent() === false) {
-        http_response_code(200);
-    }
-    exit(0);
+    http_response_code(200);
+    exit();
 }
+
+// -------------------------------------------------------------------------
+// REVISIÓN DEL TOKEN: Asegurar que PHP lea la cabecera Authorization
+// En Nginx, a veces no se inyecta en $_SERVER['HTTP_AUTHORIZATION'] por defecto.
+// Copia esta validación para que tu sistema de sesiones no falle después:
+if (!isset($_SERVER['HTTP_AUTHORIZATION']) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $_SERVER['HTTP_AUTHORIZATION'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+}
+// -------------------------------------------------------------------------
+
+// ... El resto de tu código original (enrutador, requerir archivos, etc.) continúa abajo ...
+
 
 require_once "../src/config/ApiResponse.php";
 
