@@ -1,4 +1,4 @@
-import { getUserList } from './components/userList.js?v=20261009-5'
+import { getUserList } from './components/userList.js?v=20261030-1'
 import { getProductList } from './components/productList.js?v=20261021-1'
 import { getOrderList } from './components/orderList.js'
 import { getClientList } from './components/clientList.js'
@@ -103,13 +103,14 @@ const updateAdminButton = () => {
     button.title = signedIn ? 'Cerrar sesión' : 'Iniciar sesión';
     button.classList.toggle('bg-emerald-600', signedIn);
     button.classList.toggle('hover:bg-emerald-700', signedIn);
+    document.getElementById('adminLoginButton').classList.toggle('hidden', signedIn);
     document.querySelectorAll('.employee-nav').forEach(link => link.classList.toggle('hidden', !isAdmin()));
 };
 const renderCurrentView = async () => {
     await view[currentView]();
     setActiveLink(currentView);
 };
-const showAdminLogin = () => {
+const showLogin = (adminMode = false) => {
     if (document.getElementById('adminLoginModal')) return;
     document.body.insertAdjacentHTML('beforeend', `<div id="adminLoginModal" class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/55 p-3 sm:p-6">
         <div class="grid w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white shadow-2xl lg:min-h-[590px] lg:grid-cols-[1.05fr_0.95fr]">
@@ -144,6 +145,8 @@ const showAdminLogin = () => {
         </div>
     </div>`);
     const modal = document.getElementById('adminLoginModal');
+    modal.querySelector('h2').textContent = adminMode ? 'Iniciar como admin' : 'Inicia sesión';
+    modal.querySelector('#adminLoginForm button:not([type="button"])').textContent = adminMode ? 'Iniciar como admin' : 'Iniciar sesión';
     document.getElementById('cancelAdminLogin').onclick = () => modal.remove();
     document.getElementById('adminLoginForm').onsubmit = async event => {
         event.preventDefault();
@@ -152,17 +155,13 @@ const showAdminLogin = () => {
             const username = form.elements.username.value.trim();
             const password = form.elements.password.value;
             let profile;
-            try {
+            if (adminMode) {
                 const admin = await api.adminLogin(username, password);
                 profile = { type: 'admin', name: admin.username || 'Administrador', role: 'Administrador' };
-            } catch (adminError) {
-                try {
-                    const result = await api.employeeLogin(username, password);
-                    const employee = result.employee || {};
-                    profile = { type: 'employee', name: [employee.nombre, employee.apellidos].filter(Boolean).join(' ') || username, role: employee.permiso || 'Empleado' };
-                } catch {
-                    throw adminError;
-                }
+            } else {
+                const result = await api.employeeLogin(username, password);
+                const employee = result.employee || {};
+                profile = { type: 'employee', name: [employee.nombre, employee.apellidos].filter(Boolean).join(' ') || username, role: employee.permiso || 'Empleado' };
             }
             sessionStorage.setItem('compraCompuProfile', JSON.stringify(profile));
             modal.remove(); updateAdminButton(); await renderCurrentView();
@@ -188,8 +187,9 @@ document.getElementById('adminButton').onclick = async () => {
     if (isAdmin() || isEmployee() || sessionStorage.getItem('compraCompuProfile')) {
         adminLogout(); employeeLogout(); sessionStorage.removeItem('compraCompuProfile'); updateAdminButton(); await renderCurrentView();
     }
-    else showAdminLogin();
+    else showLogin(false);
 };
+document.getElementById('adminLoginButton').onclick = () => showLogin(true);
 window.addEventListener('admin-auth-expired', async () => {
     updateAdminButton();
     await renderCurrentView();

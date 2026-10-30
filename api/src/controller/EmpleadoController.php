@@ -22,8 +22,8 @@ class EmpleadoController
     {
         $data = ApiResponse::input(['ci', 'nombre', 'apellidos', 'permiso', 'salario', 'email', 'password']);
         if ($data === null) return;
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) || !in_array($data['permiso'], ['Vendedor', 'Supervisor'], true)) {
-            ApiResponse::error('Ingresa un correo válido y elige Vendedor o Supervisor.', 400);
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) || !in_array($data['permiso'], ['Vendedor', 'Supervisor', 'Administrador'], true)) {
+            ApiResponse::error('Ingresa un correo válido y elige Vendedor, Supervisor o Administrador.', 400);
             return;
         }
         if (strlen($data['password']) < 8) {
@@ -38,16 +38,16 @@ class EmpleadoController
     {
         $data = ApiResponse::input(['ci', 'nombre', 'apellidos', 'permiso', 'salario', 'email']);
         if ($data === null) return;
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) || !in_array($data['permiso'], ['Vendedor', 'Supervisor'], true)) {
-            ApiResponse::error('Ingresa un correo válido y elige Vendedor o Supervisor.', 400);
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) || !in_array($data['permiso'], ['Vendedor', 'Supervisor', 'Administrador'], true)) {
+            ApiResponse::error('Ingresa un correo válido y elige Vendedor, Supervisor o Administrador.', 400);
             return;
         }
         if (($data['password'] ?? '') !== '' && strlen($data['password']) < 8) {
             ApiResponse::error('La contraseña debe tener al menos 8 caracteres.', 400);
             return;
         }
-        if (!empleados::hasAccount($id) && empty($data['password'])) {
-            ApiResponse::error('Define una contraseña para crear la cuenta de este empleado.', 400);
+        if (!empleados::hasPassword($id) && empty($data['password'])) {
+            ApiResponse::error('Define una contraseña para este empleado.', 400);
             return;
         }
         $updated = empleados::update($id, $data);

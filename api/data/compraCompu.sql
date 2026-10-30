@@ -13,16 +13,17 @@ CREATE TABLE IF NOT EXISTS clientes(
 ) ENGINE=InnoDB;
 
 -- 3. Tabla de Empleados (Se movió arriba para poder referenciarla en Usuarios)
-CREATE TABLE IF NOT EXISTS empleados(
+CREATE TABLE IF NOT EXISTS empleados (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     ci VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(50) NOT NULL,
     apellidos VARCHAR(50) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     permiso VARCHAR(50) DEFAULT 'Vendedor',
     salario DECIMAL(10,2) NOT NULL CHECK(salario > 0),
+    email VARCHAR(100) NOT NULL UNIQUE,
     fecha_ingreso DATE DEFAULT (CURRENT_DATE)
 ) ENGINE=InnoDB;
-
 -- 2. Tabla de Usuarios (CORREGIDA: Ahora referenica a Empleados)
 CREATE TABLE IF NOT EXISTS usuarios(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,

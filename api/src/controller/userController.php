@@ -1,16 +1,15 @@
 <?php
-require_once "../src/models/users.php";
+require_once __DIR__ . '/../models/users.php';
 require_once __DIR__ . '/../config/EmployeeAuth.php';
-class userController{
-    public function apiStatus()
+
+class userController
+{
+    public function apiStatus(): void
     {
-        echo json_encode([
-            'estado' => true,
-            'message' => 'API de CompraCompu disponible.',
-        ], JSON_UNESCAPED_UNICODE);
+        echo json_encode(['estado' => true, 'message' => 'API de CompraCompu disponible.'], JSON_UNESCAPED_UNICODE);
     }
 
-    public function login()
+    public function login(): void
     {
         $data = json_decode(file_get_contents('php://input'), true);
         if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
@@ -20,192 +19,69 @@ class userController{
         echo json_encode(EmployeeAuth::login($data), JSON_UNESCAPED_UNICODE);
     }
 
-    public function getAll()
+    public function getAll(): void
     {
-        $usuarios=usuarios::all();
-        echo json_encode($usuarios);
+        echo json_encode(usuarios::all(), JSON_UNESCAPED_UNICODE);
     }
 
- // actualizar usuarios
-    public function update($id)
+    public function add(): void
     {
-        $jsonData=file_get_contents('php://input');
-       $data= json_decode($jsonData,true);
-         if(json_last_error()!=JSON_ERROR_NONE)
-                    {
-                echo json_encode(
-                    [
-                        "status"=>"error codificacion",
-                        "message"=>json_last_error_msg(),
-                    ]);
-                return;
-            }
-        if(!isset($data['cod_cliente']) || trim($data['cod_cliente'])=="")
-                  {
-                echo json_encode(
-                    [
-                        "status"=>"error",
-                        "message"=>"el código del cliente es obligatorio",
-                    ]);
-                return;
-            }
-            if(!isset($data['email']) || trim($data['email'])=="")
-                  {
-                echo json_encode(
-                    [
-                        "status"=>"error",
-                        "message"=>"el email es obligatorio",
-                    ]);
-                return;
-            }
-        if(!isset($data['password_hash']) || trim($data['password_hash'])=="")
-                  {
-                echo json_encode(
-                    [
-                        "status"=>"error",
-                        "message"=>"la contraseña es obligatoria",
-                    ]);
-                return;
-            }
-             if(!isset($data['estado_cuenta']) || trim($data['estado_cuenta'])=="")
-                  {
-                echo json_encode(
-                    [
-                        "status"=>"error",
-                        "message"=>"el estado de la cuenta es obligatorio",
-                    ]);
-                return;
-            }
-        $data['password_hash'] = password_hash($data['password_hash'], PASSWORD_DEFAULT);
-        $usuario=usuarios::update($id,$data);
-
-        if($usuario)
-        {
-            echo json_encode(
-                [
-                "estado"=>true,
-                "message"=>"usuario actualizado correctamente"
-            ]);
-        return;
-        
+        $data = ApiResponse::input(['cod_empleado', 'email', 'password_hash']);
+        if ($data === null) return;
+        $this->saveAccount($data);
+        if (http_response_code() >= 400) return;
+        $id = usuarios::add([
+            'cod_empleado' => $data['cod_empleado'],
+            'email' => trim($data['email']),
+            'password_hash' => password_hash($data['password_hash'], PASSWORD_DEFAULT),
+            'estado_cuenta' => $data['estado_cuenta'] ?? 'Activo',
+        ]);
+        echo json_encode(['estado' => (bool)$id, 'message' => $id ? 'usuario agregado correctamente' : 'no se pudo agregar el usuario', 'id' => $id], JSON_UNESCAPED_UNICODE);
     }
 
-    echo json_encode($usuario);
-     }
-      //adicionar usuario
-    public function add()
+    public function update($id): void
     {
-        $jsonData = file_get_contents('php://input');
-        $data = json_decode($jsonData, true);
-        if(json_last_error()!=JSON_ERROR_NONE)
-            {
-                echo json_encode(
-                    [
-                        "status"=>"error codificacion",
-                        "message"=>json_last_error_msg(),
-                    ]);
-                return;
-            }
-        $camposObligatorios=[
-            "cod_cliente",
-            "email",
-            "password_hash",
+        $data = ApiResponse::input(['cod_empleado', 'email']);
+        if ($data === null) return;
+        $this->saveAccount($data, $id);
+        if (http_response_code() >= 400) return;
+        $values = [
+            'cod_empleado' => $data['cod_empleado'],
+            'email' => trim($data['email']),
+            'estado_cuenta' => $data['estado_cuenta'] ?? 'Activo',
         ];
-        $camposFaltantes=[];
-
-        foreach($camposObligatorios as $campo)
-            {
-                if(!isset($data[$campo]) || trim((string)$data[$campo])=="")
-                    {
-                        $camposFaltantes[]=$campo;
-                    }
-            }
-
-        if(count($camposFaltantes)>0)
-            {
-                echo json_encode(
-                    [
-                        "status"=>"error",
-                        "message"=>"debe llenar los datos que faltan",
-                        "campos_faltantes"=>$camposFaltantes,
-                    ]);
+        if (!empty($data['password_hash'])) {
+            if (strlen($data['password_hash']) < 8) {
+                ApiResponse::error('La contraseña debe tener al menos 8 caracteres.', 400);
                 return;
             }
+            $values['password_hash'] = password_hash($data['password_hash'], PASSWORD_DEFAULT);
+        }
+        $updated = usuarios::update($id, $values);
+        echo json_encode(['estado' => (bool)$updated, 'message' => $updated ? 'usuario actualizado correctamente' : 'no se pudo actualizar el usuario'], JSON_UNESCAPED_UNICODE);
+    }
 
-        $datosUsuario=[];
-        foreach($camposObligatorios as $campo)
-            {
-                $datosUsuario[$campo]=$data[$campo];
-            }
-
-        $datosUsuario['password_hash'] = password_hash($datosUsuario['password_hash'], PASSWORD_DEFAULT);
-
-        $conflicto = usuarios::findConflict($datosUsuario['cod_cliente'], $datosUsuario['email']);
-        if ($conflicto) {
-            http_response_code(409);
-            $campo = (string)$conflicto['cod_cliente'] === (string)$datosUsuario['cod_cliente']
-                ? 'cod_cliente'
-                : 'email';
-            echo json_encode([
-                'estado' => false,
-                'status' => 'error',
-                'message' => $campo === 'cod_cliente'
-                    ? 'El cliente ya tiene un usuario registrado.'
-                    : 'El correo electrónico ya está registrado.',
-                'campo' => $campo,
-            ]);
+    private function saveAccount(array $data, $exceptId = null): void
+    {
+        if (!filter_var(trim($data['email']), FILTER_VALIDATE_EMAIL)) {
+            ApiResponse::error('Ingresa un correo electrónico válido.', 400);
             return;
         }
-
-        try {
-            $usuario = usuarios::add($datosUsuario);
-        } catch (\PDOException $error) {
-            // Mantiene una respuesta útil incluso si dos solicitudes se procesan a la vez.
-            if ((int)($error->errorInfo[1] ?? 0) === 1062) {
-                http_response_code(409);
-                echo json_encode([
-                    'estado' => false,
-                    'status' => 'error',
-                    'message' => 'El cliente o el correo electrónico ya está registrado.',
-                ]);
-                return;
-            }
-            throw $error;
+        if (!ctype_digit((string)$data['cod_empleado'])) {
+            ApiResponse::error('Selecciona un empleado válido.', 400);
+            return;
         }
-
-        if($usuario)
-        {
-            echo json_encode(
-                [
-                "estado" => true,
-                "message" => "usuario agregado correctamente "
-            ]);
-        return;
-        
+        $conflict = usuarios::findConflict($data['cod_empleado'], trim($data['email']), $exceptId);
+        if ($conflict) {
+            $sameEmployee = (string)$conflict['cod_empleado'] === (string)$data['cod_empleado'];
+            http_response_code(409);
+            ApiResponse::error($sameEmployee ? 'El empleado ya tiene una cuenta.' : 'El correo electrónico ya está registrado.');
+        }
     }
 
-    echo json_encode($usuario);
-     }
-    // eliminar usuario
-    public function delete($id)
+    public function delete($id): void
     {
-        $usuario=usuarios::delete($id);
-
-        if($usuario)
-        {
-            echo json_encode(
-                [
-                "estado"=>true,
-                "message"=>"usuario eliminado correctamente"
-            ]);
-        return;
-        
+        $deleted = usuarios::delete($id);
+        echo json_encode(['estado' => (bool)$deleted, 'message' => $deleted ? 'usuario eliminado correctamente' : 'no se pudo eliminar el usuario'], JSON_UNESCAPED_UNICODE);
     }
-
-    echo json_encode(
-        [
-            "estado"=>false,
-            "message"=>"no se pudo eliminar el usuario"
-        ]);
-     }
-   }
+}

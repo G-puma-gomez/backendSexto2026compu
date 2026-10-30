@@ -1,78 +1,63 @@
 <?php
-include_once __DIR__."/../config/conexionDB.php";
+include_once __DIR__ . '/../config/conexionDB.php';
+
 class usuarios
 {
-    public static function all(){
-        $sql="SELECT * FROM usuarios";
-        return ConexionPDO::query($sql);
-        //self::$usuarios;
-    }
- public static function update($id,$data)
+    public static function all(): array
     {
-       if(isset($data['id']))
-        {
-           unset($data['id']);
+        $columns = ConexionPDO::connect()->query('SHOW COLUMNS FROM empleados')->fetchAll(PDO::FETCH_COLUMN, 0);
+        $roleColumn = in_array('permiso', $columns, true) ? 'permiso' : 'cargo';
+        return ConexionPDO::query("SELECT u.id, u.cod_empleado, u.email, u.estado_cuenta, u.ultimo_acceso,
+            e.nombre, e.apellidos, e.`$roleColumn` AS permiso
+            FROM usuarios u LEFT JOIN empleados e ON e.id=u.cod_empleado");
+    }
+
+    public static function findConflict($codEmpleado, $email, $exceptId = null): ?array
+    {
+        $sql = 'SELECT id, cod_empleado, email FROM usuarios WHERE (cod_empleado=:cod_empleado OR email=:email)';
+        $params = [':cod_empleado' => $codEmpleado, ':email' => $email];
+        if ($exceptId !== null) {
+            $sql .= ' AND id<>:id';
+            $params[':id'] = $exceptId;
         }
-        $campos=[];
-        $valores=[];
-        // construir datos
-        foreach($data as $columna=>$valor)
-            {
-                $campos[]="$columna=:$columna";
-                $valores[":$columna"] = $valor;
-
-            }
-             
-        $stringCampos=implode(",",$campos);
-        // preparamos la consulta 
-        $sql="UPDATE usuarios SET $stringCampos WHERE id=:id";
-        $valores[':id']=$id;
-        $result=ConexionPDO::execute($sql, $valores,false);
-
-        return $result;
+        $sql .= ' LIMIT 1';
+        $rows = ConexionPDO::query($sql, $params);
+        return $rows[0] ?? null;
     }
-    public static function add($data)
+
+    public static function add(array $data)
     {
-        if(isset($data['id']))
-        {
-           unset($data['id']);
+        $db = ConexionPDO::connect();
+        $fields = ['cod_empleado', 'email', 'password_hash', 'estado_cuenta'];
+        $values = [
+            ':cod_empleado' => $data['cod_empleado'],
+            ':email' => $data['email'],
+            ':password_hash' => $data['password_hash'],
+            ':estado_cuenta' => $data['estado_cuenta'] ?? 'Activo',
+        ];
+        $stmt = $db->prepare('INSERT INTO usuarios (' . implode(',', $fields) . ') VALUES (:cod_empleado,:email,:password_hash,:estado_cuenta)');
+        $stmt->execute($values);
+        return (int)$db->lastInsertId();
+    }
+
+    public static function update($id, array $data): bool
+    {
+        $allowed = ['cod_empleado', 'email', 'password_hash', 'estado_cuenta'];
+        $values = array_intersect_key($data, array_flip($allowed));
+        if ($values === []) return false;
+        $sets = [];
+        $params = [':id' => $id];
+        foreach ($values as $field => $value) {
+            if ($field === 'password_hash' && $value === '') continue;
+            $sets[] = "$field=:$field";
+            $params[":$field"] = $value;
         }
-        $campos=[];
-        $valores=[];
-        $placeholders=[];
-        // construir datos
-        foreach($data as $columna=>$valor)
-            {
-                $campos[]=$columna;
-                $placeholders[]=":$columna";
-                $valores[":$columna"] = $valor;
-
-            }
-        $stringCampos=implode(",",$campos);
-        $stringPlaceholders=implode(",",$placeholders);
-        // preparamos la consulta 
-        $sql="INSERT INTO usuarios ($stringCampos) VALUES ($stringPlaceholders)";
-        $result=ConexionPDO::execute($sql, $valores,true);
-        return $result;
-     }
-    public static function findConflict($codCliente, $email)
-    {
-        $sql = "SELECT cod_cliente, email FROM usuarios
-                WHERE cod_cliente = :cod_cliente OR email = :email
-                LIMIT 1";
-        $usuarios = ConexionPDO::query($sql, [
-            ':cod_cliente' => $codCliente,
-            ':email' => $email,
-        ]);
-
-        return $usuarios[0] ?? null;
+        if ($sets === []) return true;
+        return ConexionPDO::execute('UPDATE usuarios SET ' . implode(',', $sets) . ' WHERE id=:id', $params, false);
     }
+
     public static function delete($id)
     {
-        $sql="DELETE FROM usuarios WHERE id=:id";
-        $valores=[':id'=>$id];
-        $result=ConexionPDO::execute($sql, $valores,false);
-        return $result;
-     }
-     
+        return ConexionPDO::execute('DELETE FROM usuarios WHERE id=:id', [':id' => $id], false);
+    }
 }

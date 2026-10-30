@@ -51,12 +51,12 @@ SELECT * FROM pedido;
 SELECT * FROM pedido_producto;
 
 -- Empleados (Generará IDs correlativos automáticos: 1, 2, 3, 4)
-INSERT INTO empleados(ci, nombre, apellidos, permiso, salario, fecha_ingreso) VALUES
-('5421896', 'Alejandro', 'Torres Rojas', 'Administrador', 5500.00, '2025-01-10'),     -- ID 1
-('8741235', 'Paola', 'Suárez Justiniano', 'Vendedor', 3000.00, '2025-06-15'),          -- ID 2
-('6325147', 'Ricardo', 'Vaca Villagómez', 'Vendedor', 3000.00, '2025-08-01'),          -- ID 3
-('4952187', 'Fernando', 'Ortiz Mamani', 'Técnico', 3500.00, '2026-02-10');             -- ID 4
-
+INSERT INTO empleados (ci, nombre, apellidos, password_hash, permiso, salario, email , fecha_ingreso) 
+VALUES 
+('5421896', 'P_Gabriel', 'Torres Rojas', ' 123Puma@', 'Administrador', 5500.00,'gabrielpumagomez@gmail.com', '2025-01-10'),
+('8741235', 'Paola', 'Suárez Justiniano', 'wegifiev', 'Vendedor', 3000.00, 'ehryjuy','2025-06-15'),
+('6325147', 'Ricardo', 'Vaca Villagómez', '4thuikuil', 'Vendedor', 3000.00, 'teryjuj','2025-08-01'),
+('4952187', 'Fernando', 'Ortiz Mamani', 'rtyjiuloi', 'Técnico', 3500.00, 'fhyjkuy','2026-02-10');
 -- Usuarios (Corregidos los "cod_empleado" para que apunten a los IDs reales 1, 2, 3, 4)
 INSERT INTO usuarios (cod_empleado, email, password_hash, estado_cuenta, ultimo_acceso) VALUES
 (1, 'alejandro.torres@empresa.com', '$2y$10$7RzX...', 'Activo', '2026-10-16 09:15:00'),
