@@ -1,5 +1,5 @@
 const apiUrl = 'https://backendsexto2026compu.onrender.com';
-    //: 'http://api.ventacompu';
+    //: 'http://api.ventacompu';cgfe jgkugvtv cvc v 
 
 export const api = {
     // Función para obtener datos del API
