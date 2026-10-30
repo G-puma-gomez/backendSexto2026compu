@@ -20,7 +20,9 @@ excluido de Git; guarda la contraseña como un hash generado con PHP
 `password_hash($password, PASSWORD_DEFAULT)`, no como texto plano.
 
 En Render, configura las variables de entorno `ADMIN_USER`,
-`ADMIN_PASSWORD_HASH` y `ADMIN_TOKEN_SECRET` con los mismos valores de la
-configuración del administrador. `ADMIN_PASSWORD_HASH` debe contener el hash de
-la contraseña, y `ADMIN_TOKEN_SECRET` debe ser un secreto aleatorio y privado.
+`ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH` y `ADMIN_TOKEN_SECRET` en el servicio
+backend y vuelve a desplegar. `ADMIN_EMAIL` es opcional; si se configura,
+también se acepta como usuario de acceso. `ADMIN_PASSWORD_HASH` debe contener
+el hash de la contraseña, y `ADMIN_TOKEN_SECRET` debe ser un secreto aleatorio
+y privado. No guardes contraseñas en texto plano ni las agregues al repositorio.
 vhvk

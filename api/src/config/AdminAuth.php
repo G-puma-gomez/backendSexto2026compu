@@ -8,7 +8,7 @@ class AdminAuth
         $config = is_file($path) ? require $path : false;
         $config = is_array($config) ? $config : [];
 
-        foreach (['ADMIN_USER', 'ADMIN_PASSWORD_HASH', 'ADMIN_TOKEN_SECRET'] as $key) {
+        foreach (['ADMIN_USER', 'ADMIN_EMAIL', 'ADMIN_PASSWORD_HASH', 'ADMIN_TOKEN_SECRET'] as $key) {
             $value = getenv($key);
             if ($value !== false && $value !== '') {
                 $config[$key] = $value;
@@ -34,7 +34,9 @@ class AdminAuth
             return ['estado' => false, 'message' => 'El acceso de administrador no está configurado en el servidor.'];
         }
 
-        if (!hash_equals($username, (string)($data['username'] ?? ''))
+        $login = (string)($data['username'] ?? '');
+        $email = (string)($config['ADMIN_EMAIL'] ?? '');
+        if ((!hash_equals($username, $login) && ($email === '' || !hash_equals($email, $login)))
             || !password_verify((string)($data['password'] ?? ''), $passwordHash)) {
             http_response_code(401);
             return ['estado' => false, 'message' => 'Usuario o contraseña incorrectos.'];
