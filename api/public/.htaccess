@@ -1,6 +1,21 @@
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "https://backendsexto2026compu-1.onrender.com"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept, Origin"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header set Access-Control-Allow-Credentials "true"
+</IfModule>
+
 RewriteEngine On
 
+# --- AGREGA ESTAS DOS LÍNEAS PARA ENVIAR EL TOKEN A PHP ---
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Interceptar peticiones OPTIONS (Preflight)
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ - [R=200,L]
+
+# Enrutamiento normal
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-RewriteRule ^ index.php [QSA,L]
+RewriteRule ^(.*)$ index.php [QSA,L]

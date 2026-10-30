@@ -7,11 +7,16 @@
 
 RewriteEngine On
 
-# 1. Interceptar peticiones OPTIONS (Preflight) y responder un 200 directo sin tocar PHP
+# --- AGREGA ESTAS DOS LÍNEAS PARA ENVIAR EL TOKEN A PHP ---
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Interceptar peticiones OPTIONS (Preflight)
 RewriteCond %{REQUEST_METHOD} OPTIONS
 RewriteRule ^(.*)$ - [R=200,L]
 
-# 2. Tu enrutamiento normal para archivos que no existen físicamente
+# Enrutamiento normal
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
+
