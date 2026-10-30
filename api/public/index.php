@@ -1,14 +1,17 @@
 <?php
 // Permitir el origen exacto de tu frontend en Render
 header("Access-Control-Allow-Origin: https://backendsexto2026compu-1.onrender.com");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Access-Control-Allow-Credentials: true");
 
-// Responder de inmediato a las peticiones de pre-vuelo (OPTIONS) que hace el navegador
+// Manejo estricto de peticiones de pre-vuelo (Preflight OPTIONS)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
+    // Limpia cualquier salida o cabecera que se haya colado antes
+    if (header_sent() === false) {
+        http_response_code(200);
+    }
+    exit(0);
 }
 
 require_once "../src/config/ApiResponse.php";
