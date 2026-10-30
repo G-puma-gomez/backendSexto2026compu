@@ -29,8 +29,12 @@ class AdminAuth
         $username = (string)($config['ADMIN_USER'] ?? '');
         $passwordHash = (string)($config['ADMIN_PASSWORD_HASH'] ?? '');
         $secret = self::tokenSecret();
-        if ($username === '' || $passwordHash === '' || $secret === ''
-            || !hash_equals($username, (string)($data['username'] ?? ''))
+        if ($username === '' || $passwordHash === '' || $secret === '') {
+            http_response_code(503);
+            return ['estado' => false, 'message' => 'El acceso de administrador no está configurado en el servidor.'];
+        }
+
+        if (!hash_equals($username, (string)($data['username'] ?? ''))
             || !password_verify((string)($data['password'] ?? ''), $passwordHash)) {
             http_response_code(401);
             return ['estado' => false, 'message' => 'Usuario o contraseña incorrectos.'];

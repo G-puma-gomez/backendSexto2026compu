@@ -56,10 +56,10 @@ async function request(endpoint, method, data) {
     const response = await fetch(`${apiUrl}/${endpoint.replace(/^\/+/, '')}`, {
         method,
         headers: {
-            'Content-Type': 'application/json',
+            ...(data !== undefined ? { 'Content-Type': 'application/json' } : {}),
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        ...(data ? { body: JSON.stringify(data) } : {}),
+        ...(data !== undefined ? { body: JSON.stringify(data) } : {}),
     });
     const result = await response.json().catch(() => ({}));
     if (response.status === 401 && token) {
